@@ -180,7 +180,7 @@ export default function Home() {
             dragInterval={1}
             direction="horizontal"
             cursor="col-resize"
-            style={{ display: "flex", width: "99vw", height: "89.2vh" }}
+            style={{ display: "flex", width: "100vw", height: "87vh" }}
           >
             <LeftSection />
             <RightSection />
