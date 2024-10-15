@@ -1582,3 +1582,17 @@ gpt-icon-small {
   font-size: 16px;
   font-weight: 600;
 }
+
+.var-container{
+  display: flex;
+  margin-left: 0px;
+  align-items: center;
+  gap: 40px;
+}
+
+.var-container .name{
+  font-weight: 600;
+  font-size: 20px;
+  width: 150px;
+  text-align: right;
+}

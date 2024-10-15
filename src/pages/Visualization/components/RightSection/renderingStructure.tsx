@@ -56,12 +56,12 @@ export const renderingStructure = (
           <div key={index}>
             <div className="call-stack-box">
               <span className="call-stack-name">{key}</span>
-              {structures[key].map((structure) => {
+              {structures[key].map((structure, index) => {
                 switch (structure.type) {
                   case "variable": {
                     const variableItem = structure as DataStructureVarItem;
                     return (
-                      <AnimatePresence key={variableItem.name} mode="wait">
+                      <AnimatePresence key={variableItem.name + key} mode="wait">
                         <motion.ul
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
@@ -84,7 +84,7 @@ export const renderingStructure = (
                   case "list": {
                     const listItem = structure as DataStructureListItem;
                     return (
-                      <AnimatePresence key={listItem.name} mode="wait">
+                      <AnimatePresence key={listItem.name + key} mode="wait">
                         <motion.div
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
@@ -102,7 +102,7 @@ export const renderingStructure = (
                   case "function": {
                     const functionItem = structure as DataStructureFunctionItem;
                     return (
-                      <AnimatePresence key={functionItem.name} mode="wait">
+                      <AnimatePresence key={functionItem.name + key} mode="wait">
                         <motion.div
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}

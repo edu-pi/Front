@@ -7,5 +7,5 @@ export interface WhileItem {
   highlights: number[];
   depth: number;
   isLight: boolean;
-  child: AllObjectItem[];
+  child: any[];
 }

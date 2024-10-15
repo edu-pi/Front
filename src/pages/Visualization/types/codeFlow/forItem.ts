@@ -13,5 +13,5 @@ export interface ForItem {
   type: string;
   depth: number;
   isLight: boolean;
-  child: AllObjectItem[];
+  child: any[];
 }

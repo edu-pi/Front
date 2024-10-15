@@ -7,5 +7,5 @@ export interface ConditionItem {
   highlights?: number[];
   depth: number;
   isLight: boolean;
-  child: AllObjectItem[];
+  child: any[];
 }

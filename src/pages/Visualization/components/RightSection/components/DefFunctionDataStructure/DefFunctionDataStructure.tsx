@@ -11,7 +11,7 @@ const DefFunctionDataStructure = ({ functionItem }: Props) => {
       <div className={styles["container"]}>
           <div className={styles["left-container"]}>
               <span className={styles["def"]}>def</span>
-              <img src="/image/img_function_arrow.svg"/>
+              <img src="/image/img_function_arrow.svg"  style={{ width: "30px" }}/>
           </div>
           <div className={styles["right-container"]}>
               <span className={styles["func"]}>func</span>

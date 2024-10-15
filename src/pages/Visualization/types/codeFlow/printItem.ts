@@ -8,5 +8,5 @@ export interface PrintItem {
   expr: string;
   console: string;
   highlights: number[];
-  child: AllObjectItem[];
+  child: any[];
 }

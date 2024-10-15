@@ -10,7 +10,7 @@ import ElifBox from "./components/ElifBox/ElifBox";
 import CodeFlowVariableBox from "./components/CodeFlowVariableBox/CodeFlowVariableBox";
 import CodeFlowListWrapper from "./components/CodeFlowListWrapper/CodeFlowListWrapper";
 import WhileBox from "./components/WhileBox/WhileBox";
-
+import CallUserFuncBox from "./components/CallUserFuncBox/CallUserFuncBox";
 // type import
 import { ElseItem } from "@/pages/Visualization/types/codeFlow/elseItem";
 import { ForItem } from "@/pages/Visualization/types/codeFlow/forItem";
@@ -19,7 +19,7 @@ import { ConditionItem } from "@/pages/Visualization/types/codeFlow/conditionIte
 import { CodeFlowVariableItem } from "@/pages/Visualization/types/codeFlow/codeFlowVariableItem";
 import { CodeFlowListItem } from "@/pages/Visualization/types/codeFlow/codeFlowListItem";
 import { WhileItem } from "@/pages/Visualization/types/codeFlow/whileItem";
-
+import { CallUserFuncItem } from "@/pages/Visualization/types/codeFlow/callUserFuncItem";
 //zustand
 import { useArrowStore } from "@/store/arrow";
 
@@ -53,7 +53,8 @@ export const renderingCodeFlow = (codeFlows: AllObjectItem[], width: number, hei
   return (
     <>
       {codeFlows.map((codeFlow, index) => {
-        switch (codeFlow.type) {
+        const type = codeFlow.type.toLowerCase();
+        switch (type) {
           case "print": {
             const printItem = codeFlow as PrintItem;
             return (
@@ -140,6 +141,15 @@ export const renderingCodeFlow = (codeFlows: AllObjectItem[], width: number, hei
                     {renderingCodeFlow(codeFlow.child, width, height)}
                   </WhileBox>
                 </CodeFlowItem>
+              </div>
+            );
+          case "calluserfunc":
+            const callUserFuncItem = codeFlow as CallUserFuncItem;
+            return (
+              <div key={callUserFuncItem.id}>
+                <CallUserFuncBox key={index} callUserFuncItem={callUserFuncItem}>
+                  {renderingCodeFlow(codeFlow.child, width, height)}
+                </CallUserFuncBox>
               </div>
             );
           default:

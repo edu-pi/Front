@@ -5,5 +5,5 @@ export interface ElseItem {
   type: string;
   depth: number;
   isLight: boolean;
-  child: AllObjectItem[];
+  child: any[];
 }

@@ -9,10 +9,11 @@ import { IfElseChangeDataToAdd } from "@/pages/Visualization/types/dataToAdd/ifE
 import { CodeFlowVariableDtoToAdd } from "@/pages/Visualization/types/dataToAdd/codeFlowVariableDataToAdd";
 import { WhileDto } from "@/pages/Visualization/types/dto/whileDto";
 import { CodeFlowListDto } from "@/pages/Visualization/types/dto/codeFlowListDto";
+import { CallUserFuncDto } from "@/pages/Visualization/types/dto/callUserFuncDto";
 // 스택에 넣을 객체를 생성하는 함수
 export const createObjectToAdd = (
-  preprocessedCode: PrintDataToAdd | ForDataToAdd | IfElseDataToAdd | WhileDto
-): AllObjectItem => {
+  preprocessedCode: PrintDataToAdd | ForDataToAdd | IfElseDataToAdd | WhileDto | CallUserFuncDto
+): any => {
   const baseObject: AllObjectItem = {
     id: preprocessedCode.id!,
     type: preprocessedCode.type,
@@ -113,6 +114,14 @@ export const createObjectToAdd = (
         type: "while",
         highlights: [],
         expr: (preprocessedCode as WhileDto).expr,
+      };
+    case "calluserfunc":
+      return {
+        ...baseObject,
+        type: "callUserFunc",
+        highlights: [],
+        assignName: (preprocessedCode as CallUserFuncDto).assignName,
+        signature: (preprocessedCode as CallUserFuncDto).signature,
       };
     default:
       throw new Error(`Unsupported type: ${type}`);

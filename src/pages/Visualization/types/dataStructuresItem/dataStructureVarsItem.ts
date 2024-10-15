@@ -1,8 +1,8 @@
 export interface DataStructureVarsItem {
-  id: number;
+  id?: number;
   name: string;
   expr: string;
-  code: string;
+  code?: string;
   type: string;
   isLight?: boolean;
 }

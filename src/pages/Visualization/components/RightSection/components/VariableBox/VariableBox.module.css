@@ -7,6 +7,9 @@
   background-color: #565656;
   margin: 0px 10px;
   border-radius: 5px;
+  font-weight: 500;
+  min-width: 40px;
+  min-height: 40px;
 }
 span {
   margin-bottom: 4px;
@@ -14,12 +17,11 @@ span {
 }
 .var-data > span {
   display: inline-block;
-  min-width: 10px;
   border-radius: 4px;
   color: #fff;
   padding: 8px 15px;
-
   position: relative;
+  margin-top: 3px
 }
 .var-data > span > span {
   position: absolute;

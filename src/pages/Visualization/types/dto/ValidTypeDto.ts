@@ -8,6 +8,7 @@ import { WhileDto, isWhileDto } from "./whileDto";
 import { CallUserFuncDto, isCallUserFuncDto } from "./callUserFuncDto";
 import { CreateCallStackDto, isCreateCallStackDto } from "./createCallStackDto";
 import { EndUserFuncDto, isEndUserFuncDto } from "./endUserFuncDto";
+import { CreateFuncDto, isCreateFuncDto } from "./createFuncDto";
 export type ValidTypeDto =
   | ForDto
   | PrintDto
@@ -17,6 +18,7 @@ export type ValidTypeDto =
   | CodeFlowVariableDto
   | WhileDto
   | CallUserFuncDto
+  | CreateFuncDto
   | CreateCallStackDto
   | EndUserFuncDto;
 
@@ -30,6 +32,7 @@ export const isValidTypeDto = (item: any): item is ValidTypeDto => {
     isCodeFlowVariableDto(item) ||
     isWhileDto(item) ||
     isCallUserFuncDto(item) ||
+    isCreateFuncDto(item) ||
     isCreateCallStackDto(item) ||
     isEndUserFuncDto(item)
   );
