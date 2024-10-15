@@ -196,12 +196,10 @@ const CodeEditor = () => {
     });
     // 포커스 이벤트 리스너 추가
     editor.onDidFocusEditorText(() => {
-      console.log("Editor has gained focus");
       setFocus(true);
     });
     // 포커스 해제 이벤트 리스너 추가
     editor.onDidBlurEditorText(() => {
-      console.log("Editor has lost focus");
       setFocus(false);
     });
   };

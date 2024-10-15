@@ -145,11 +145,12 @@ const RightSection = () => {
 
       // 자료구조 시각화 부분이 들어왔을 때
       if (preprocessedCode.type.toLowerCase() === "assign".toLowerCase()) {
-        const callStack = (preprocessedCode as VariablesDto).callStack;
+        const callStackName = (preprocessedCode as VariablesDto).callStackName;
         // 오른쪽에 변수로 함수를 넣을 때
         if ((preprocessedCode as VariablesDto).variables[0].type.toLowerCase() === "function".toLowerCase()) {
-          const { id, expr, name, code, type } = (preprocessedCode as VariablesDto).variables[0];
-          accDataStructures[callStack].push({ id, expr, name, code, type });
+          const { id, expr, name, type } = (preprocessedCode as VariablesDto).variables[0];
+
+          accDataStructures[callStackName].push({ id, expr, name, type });
         } else {
           (preprocessedCode as VariablesDto).variables.forEach((variable: VariableDto) => {
             highlightLine.push(variable.id);
@@ -160,11 +161,11 @@ const RightSection = () => {
             if (usedName.includes(variable.name!)) {
               const targetName = variable.name!;
 
-              accDataStructures = updateDataStructure(targetName, accDataStructures, variable, callStack);
+              accDataStructures = updateDataStructure(targetName, accDataStructures, variable, callStackName);
             }
             // 처음 시각화해주는 자료구조인 경우
             else {
-              accDataStructures.callStack.push(variable);
+              accDataStructures[callStackName].push(variable);
               usedName.push(variable.name!);
             }
 

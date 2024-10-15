@@ -1,0 +1,34 @@
+@import url("https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@700&display=swap");
+
+.return-data {
+  display: flex;
+  align-items: center;
+  gap: 1px;
+  background-color: #565656;
+  width: fit-content;
+  border-radius: 5px;
+}
+span {
+  margin-bottom: 4px;
+  display: inline-block;
+}
+.return-data > span {
+  display: inline-block;
+  min-width: 10px;
+  border-radius: 4px;
+  color: #fff;
+  padding: 8px 15px;
+
+  position: relative;
+}
+.return-data > span > span {
+  position: absolute;
+  bottom: -28px;
+  color: rgba(24, 24, 24, 0.3);
+  left: 50%;
+  text-wrap: nowrap;
+  transform: translateX(-50%);
+}
+.highlight {
+  background-color: #364fce;
+}

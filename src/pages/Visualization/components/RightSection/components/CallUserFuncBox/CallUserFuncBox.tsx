@@ -28,10 +28,7 @@ const CallUserFuncBox = ({ callUserFuncItem, children }: CallUserFuncProps): Rea
         <div className={styles["func-box-content"]}>
           <div className={styles["func-box-content-text"]}>{signature}</div>
         </div>
-        <div className={styles["func-box-children"]}>
-          함수 안에 코드흐름 들어갈 부분
-          {children && <div>{children}</div>}
-        </div>
+        <div className={styles["func-box-children"]}>{children && <div>{children}</div>}</div>
       </div>
     </>
   );

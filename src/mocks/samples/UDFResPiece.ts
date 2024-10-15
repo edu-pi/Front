@@ -10,7 +10,7 @@ const UDFResPiece = [
         type: "function",
       },
     ],
-    callStack: "main",
+    callStackName: "main",
     type: "assign",
   },
   //2. 함수 호출 부분
@@ -41,6 +41,34 @@ const UDFResPiece = [
     callStackName: "isEven",
     code: "result=isEven(name)",
     type: "createCallStack",
+  },
+  {
+    // 왼쪽 코드 흐름
+    id: 2,
+    name: "c",
+    depth: 3,
+    expr: "2",
+    type: "variable",
+  },
+  {
+    variables: [
+      {
+        id: 2,
+        expr: "2",
+        name: "c",
+        type: "variable",
+      },
+    ],
+    callStackName: "isEven",
+    type: "assign",
+  },
+  {
+    id: 5,
+    returnName: "", // 변수가 반환되면 값이 들어옴
+    returnValue: "True",
+    code: "return True",
+    depth: 3,
+    type: "return",
   },
 ];
 

@@ -11,6 +11,7 @@ import CodeFlowVariableBox from "./components/CodeFlowVariableBox/CodeFlowVariab
 import CodeFlowListWrapper from "./components/CodeFlowListWrapper/CodeFlowListWrapper";
 import WhileBox from "./components/WhileBox/WhileBox";
 import CallUserFuncBox from "./components/CallUserFuncBox/CallUserFuncBox";
+import ReturnBox from "./components/ReturnBox/ReturnBox";
 // type import
 import { ElseItem } from "@/pages/Visualization/types/codeFlow/elseItem";
 import { ForItem } from "@/pages/Visualization/types/codeFlow/forItem";
@@ -20,6 +21,7 @@ import { CodeFlowVariableItem } from "@/pages/Visualization/types/codeFlow/codeF
 import { CodeFlowListItem } from "@/pages/Visualization/types/codeFlow/codeFlowListItem";
 import { WhileItem } from "@/pages/Visualization/types/codeFlow/whileItem";
 import { CallUserFuncItem } from "@/pages/Visualization/types/codeFlow/callUserFuncItem";
+import { ReturnItem } from "@/pages/Visualization/types/codeFlow/returnItem";
 //zustand
 import { useArrowStore } from "@/store/arrow";
 
@@ -150,6 +152,13 @@ export const renderingCodeFlow = (codeFlows: AllObjectItem[], width: number, hei
                 <CallUserFuncBox key={index} callUserFuncItem={callUserFuncItem}>
                   {renderingCodeFlow(codeFlow.child, width, height)}
                 </CallUserFuncBox>
+              </div>
+            );
+          case "return":
+            const returnItem = codeFlow as ReturnItem;
+            return (
+              <div key={returnItem.id}>
+                <ReturnBox key={index} returnItem={returnItem} />
               </div>
             );
           default:
