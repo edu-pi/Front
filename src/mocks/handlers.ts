@@ -1,7 +1,8 @@
 import { http, HttpResponse, delay } from "msw";
 import * as jose from "jose";
-import testResponseBody from "./samples/testResponseBody.json";
-
+import testResponseBody from "./samples/testResponseBody";
+import UDFResponseBody from "./samples/UDFResponseBody";
+import UDFResPiece from "./samples/UDFResPiece";
 const JWT_SECRET = new TextEncoder().encode("your_jwt_secret_key");
 
 async function generateToken(userId: string) {
@@ -28,36 +29,36 @@ interface SignupUser {
 
 export const handlers = [
   // //시각화 요청 성공
-  // http.post("http://localhost:8080/edupi-syntax/v1/execute/visualize", () => {
-  //   return HttpResponse.json(
-  //     {
-  //       success: false,
-  //       code: "CS-200000",
-  //       detail: "success code analysis",
-  //       result: { code: testResponseBody },
-  //     },
-  //     {
-  //       status: 200,
-  //     }
-  //   );
-  // }),
-
-  // 시각화 요청 실패
-  http.post("http://localhost:8080/edupi-syntax/v1/execute/visualize", async () => {
+  http.post("http://localhost:8080/edupi-syntax/v1/execute/visualize", () => {
     return HttpResponse.json(
       {
         success: false,
-        code: "CS_400001",
-        detail: "코드 문법 오류입니다",
-        result: {
-          error: "3:7: F821 undefined name 'a'",
-        },
+        code: "CS-200000",
+        detail: "success code analysis",
+        result: { code: UDFResPiece },
       },
       {
-        status: 400,
+        status: 200,
       }
     );
   }),
+
+  // 시각화 요청 실패
+  // http.post("http://localhost:8080/edupi-syntax/v1/execute/visualize", async () => {
+  //   return HttpResponse.json(
+  //     {
+  //       success: false,
+  //       code: "CS_400001",
+  //       detail: "코드 문법 오류입니다",
+  //       result: {
+  //         error: "3:7: F821 undefined name 'a'",
+  //       },
+  //     },
+  //     {
+  //       status: 400,
+  //     }
+  //   );
+  // }),
   http.get("/edupi-user/v1/account/login/info", async () => {
     // Get the token from the cookies
 

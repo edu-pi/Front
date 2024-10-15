@@ -1566,3 +1566,19 @@ gpt-icon-small {
   left: 12px;
   top: 18px;
 }
+
+.call-stack-box {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px;
+  height: 300px;
+  width: 500px;
+  background-color: #f9fafb;
+  border: 1px solid #e1e4e8;
+  margin-top: 20px;
+}
+.call-stack-name {
+  font-size: 16px;
+  font-weight: 600;
+}

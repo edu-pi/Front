@@ -37,6 +37,7 @@ const GetCodeFlowVariableBoxLocation = ({
     </div>
   );
 };
+
 type Props = {
   codeFlowVariableItem: CodeFlowVariableItem;
   height: number;

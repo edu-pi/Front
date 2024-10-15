@@ -65,10 +65,12 @@ export default function Visualization() {
     mutationFn: fetchVisualize,
     async onSuccess(data) {
       // 타입 체크 함수
+
       if (isValidTypeDtoArray(data.result.code)) {
         setPreprocessedCodes(data.result.code);
         setDisplayNone(false);
       } else {
+        console.error("데이터 형식이 올바르지 않습니다");
         throw new Error("데이터 형식이 올바르지 않습니다");
       }
     },

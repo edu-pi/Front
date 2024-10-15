@@ -5,6 +5,9 @@ import { IfElseDto, isIfElseDto } from "./ifElseDto";
 import { IfElseChangeDto, isIfElseChangeDto } from "./ifElseChangeDto";
 import { CodeFlowVariableDto, isCodeFlowVariableDto } from "./codeFlowVariableDto";
 import { WhileDto, isWhileDto } from "./whileDto";
+import { CallUserFuncDto, isCallUserFuncDto } from "./callUserFuncDto";
+import { CreateCallStackDto, isCreateCallStackDto } from "./createCallStackDto";
+import { EndUserFuncDto, isEndUserFuncDto } from "./endUserFuncDto";
 export type ValidTypeDto =
   | ForDto
   | PrintDto
@@ -12,7 +15,10 @@ export type ValidTypeDto =
   | IfElseDto
   | IfElseChangeDto
   | CodeFlowVariableDto
-  | WhileDto;
+  | WhileDto
+  | CallUserFuncDto
+  | CreateCallStackDto
+  | EndUserFuncDto;
 
 export const isValidTypeDto = (item: any): item is ValidTypeDto => {
   return (
@@ -22,7 +28,10 @@ export const isValidTypeDto = (item: any): item is ValidTypeDto => {
     isIfElseDto(item) ||
     isIfElseChangeDto(item) ||
     isCodeFlowVariableDto(item) ||
-    isWhileDto(item)
+    isWhileDto(item) ||
+    isCallUserFuncDto(item) ||
+    isCreateCallStackDto(item) ||
+    isEndUserFuncDto(item)
   );
 };
 

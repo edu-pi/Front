@@ -1,0 +1,59 @@
+.container {
+  display: flex;
+  margin-left: 60px;
+  align-items: center; /* 모든 요소를 수직 가운데 정렬 */
+  gap: 20px; /* 요소 사이에 일정한 간격 추가 */
+}
+
+.left-container{
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.def {
+  font-weight: 600;
+  font-size: 20px;
+  margin-right: 10px;
+}
+
+
+.right-container {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.func {
+  font-weight: 500;
+  color: #565656;
+  font-size: 14px;
+  display: inline-block;
+  margin-bottom: -2px;
+}
+
+.func-data {
+  display: inline-block;
+  background-color: #565656;
+  color: white;
+  border-radius: 5px;
+}
+
+.func-data > span {
+  display: inline-block;
+  min-width: 10px;
+  border-radius: 4px;
+  padding: 8px 25px;
+  font-size: 16px;
+  font-weight: 500;
+  margin-top: 2px;
+}
+
+  .func-data > span > span {
+  position: absolute;
+  bottom: -28px;
+  color: rgba(24, 24, 24, 0.3);
+  left: 50%;
+  transform: translateX(-50%);
+}
