@@ -44,17 +44,21 @@ type Props = {
   width: number;
 };
 const CodeFlowVariableBox = ({ codeFlowVariableItem, height, width }: Props) => {
+  const { id, isLight, name, expr } = codeFlowVariableItem;
   return (
     <div className="align-left">
-      <div className={cx(styles["var-data"], codeFlowVariableItem.isLight && styles.highlight)}>
-        <GetCodeFlowVariableBoxLocation
-          key={codeFlowVariableItem.id}
-          codeFlowVariableItem={codeFlowVariableItem}
-          height={height}
-          width={width}
-        >
-          <span className={styles.text}>{codeFlowVariableItem.expr}</span>
-        </GetCodeFlowVariableBoxLocation>
+      <div className={styles["align-center"]}>
+        <span>{name}</span>
+        <div className={cx(styles["var-data"], isLight && styles.highlight)}>
+          <GetCodeFlowVariableBoxLocation
+            key={id}
+            codeFlowVariableItem={codeFlowVariableItem}
+            height={height}
+            width={width}
+          >
+            <span className={styles.text}>{expr}</span>
+          </GetCodeFlowVariableBoxLocation>
+        </div>
       </div>
     </div>
   );

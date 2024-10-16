@@ -1,7 +1,8 @@
 export interface VariableDto {
   id: number;
   name: string;
-  depth: number;
+
   expr: string;
+  code: string;
   type: string;
 }

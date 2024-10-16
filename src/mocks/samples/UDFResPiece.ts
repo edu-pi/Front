@@ -65,6 +65,16 @@ const UDFResPiece = [
     depth: 3,
     type: "return",
   },
+  {
+    id: 5,
+    returnExpr: "True", // 반환값이 없으면 빈문자열
+    depth: 1,
+    name: "result",
+    code: "return True",
+    type: "endUserFunc",
+    delFuncName: "isEven",
+    delFuncId: 1,
+  },
 ];
 
 export default UDFResPiece;

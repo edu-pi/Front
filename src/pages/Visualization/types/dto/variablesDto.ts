@@ -1,8 +1,9 @@
 // Type: assign 부분
-interface Variables {
+export interface Variables {
   id: number;
   expr: string;
   name: string;
+  code: string;
   type: string;
 }
 export interface VariablesDto {

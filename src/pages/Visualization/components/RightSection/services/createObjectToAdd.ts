@@ -11,9 +11,18 @@ import { WhileDto } from "@/pages/Visualization/types/dto/whileDto";
 import { CodeFlowListDto } from "@/pages/Visualization/types/dto/codeFlowListDto";
 import { CallUserFuncDto } from "@/pages/Visualization/types/dto/callUserFuncDto";
 import { ReturnDto } from "@/pages/Visualization/types/dto/returnDto";
+import { EndUserFuncDto } from "@/pages/Visualization/types/dto/endUserFuncDto";
+
 // 스택에 넣을 객체를 생성하는 함수
 export const createObjectToAdd = (
-  preprocessedCode: PrintDataToAdd | ForDataToAdd | IfElseDataToAdd | WhileDto | CallUserFuncDto | ReturnDto
+  preprocessedCode:
+    | PrintDataToAdd
+    | ForDataToAdd
+    | IfElseDataToAdd
+    | WhileDto
+    | CallUserFuncDto
+    | ReturnDto
+    | EndUserFuncDto
 ): any => {
   const baseObject: AllObjectItem = {
     id: preprocessedCode.id!,
@@ -131,6 +140,13 @@ export const createObjectToAdd = (
         highlights: [],
         returnName: (preprocessedCode as ReturnDto).returnName,
         returnValue: (preprocessedCode as ReturnDto).returnValue,
+      };
+    case "enduserfunc":
+      return {
+        ...baseObject,
+        type: "variable",
+        name: (preprocessedCode as EndUserFuncDto).name,
+        expr: (preprocessedCode as EndUserFuncDto).returnExpr,
       };
     default:
       throw new Error(`Unsupported type: ${type}`);

@@ -9,17 +9,19 @@ import Arrow from "./components/Arrow/Arrow";
 // 타입 정의
 import { AllObjectItem } from "@/pages/Visualization/types/codeFlow/allObjectItem";
 import { ActivateItem } from "@/pages/Visualization/types/activateItem";
-import { VariablesDto } from "@/pages/Visualization/types/dto/variablesDto";
+import { VariablesDto, Variables } from "@/pages/Visualization/types/dto/variablesDto";
 import { ForDto } from "@/pages/Visualization/types/dto/forDto";
 import { PrintDto } from "@/pages/Visualization/types/dto/printDto";
 import { IfElseDto } from "@/pages/Visualization/types/dto/ifElseDto";
 import { CodeFlowVariableDto } from "@/pages/Visualization/types/dto/codeFlowVariableDto";
 import { PrintItem } from "@/pages/Visualization/types/codeFlow/printItem";
-import { VariableDto } from "@/pages/Visualization/types/dto/variableDto";
+
 import { WhileDto } from "@/pages/Visualization/types/dto/whileDto";
 import { AllDataStructureItem } from "@/pages/Visualization/types/dataStructuresItem/allDataStructureItem";
 import { WarperDataStructureItem } from "@/pages/Visualization/types/dataStructuresItem/warperDataStructureItem";
 import { CreateCallStackDto } from "@/pages/Visualization/types/dto/createCallStackDto";
+import { EndUserFuncDto } from "@/pages/Visualization/types/dto/endUserFuncDto";
+
 // services폴더에서 가져온 함수
 import { addCodeFlow } from "./services/addCodeFlow";
 import { insertIntoDepth } from "./services/insertIntoDepth";
@@ -142,9 +144,34 @@ const RightSection = () => {
       if (preprocessedCode.type.toLowerCase() === "whiledefine") {
         continue;
       }
+      // enduserFunc 타입이 들어왔을 때 코드흐름과 변수 부분 함수를 지우고 return value를 나타나게 한다
+      if (preprocessedCode.type.toLowerCase() === "endUserFunc".toLowerCase()) {
+        let deletedCodeFlow = deleteCodeFlow(accCodeFlow.objects, (preprocessedCode as EndUserFuncDto).delFuncId);
+        usedId = usedId.filter((id) => id !== (preprocessedCode as EndUserFuncDto).delFuncId);
+        accCodeFlow = { objects: deletedCodeFlow };
+        const delName = (preprocessedCode as EndUserFuncDto).delFuncName;
+        delete accDataStructures[delName]; // 함수 이름을 키로 가지는 객체를 삭제
+        const toAddObject = createObjectToAdd(preprocessedCode as EndUserFuncDto);
+        usedId.push(toAddObject.id);
+        // isLight를 true로 바꿔준다
+        toAddObject.isLight = true;
+        let finallyCodeFlow: any;
 
+        usedId.push(toAddObject.id);
+        if (toAddObject.depth > prevTrackingDepth) {
+          finallyCodeFlow = insertIntoDepth(accCodeFlow.objects, toAddObject, prevTrackingId);
+        } else if (toAddObject.depth === prevTrackingDepth) {
+          finallyCodeFlow = insertEqualToDepth(accCodeFlow.objects, toAddObject, prevTrackingId);
+        } else {
+          finallyCodeFlow = addCodeFlow(accCodeFlow.objects, toAddObject);
+        }
+
+        accCodeFlow = { objects: finallyCodeFlow };
+        prevTrackingId = toAddObject.id;
+        prevTrackingDepth = toAddObject.depth;
+      }
       // 자료구조 시각화 부분이 들어왔을 때
-      if (preprocessedCode.type.toLowerCase() === "assign".toLowerCase()) {
+      else if (preprocessedCode.type.toLowerCase() === "assign".toLowerCase()) {
         const callStackName = (preprocessedCode as VariablesDto).callStackName;
         // 오른쪽에 변수로 함수를 넣을 때
         if ((preprocessedCode as VariablesDto).variables[0].type.toLowerCase() === "function".toLowerCase()) {
@@ -152,7 +179,7 @@ const RightSection = () => {
 
           accDataStructures[callStackName].push({ id, expr, name, type });
         } else {
-          (preprocessedCode as VariablesDto).variables.forEach((variable: VariableDto) => {
+          (preprocessedCode as VariablesDto).variables.forEach((variable: Variables) => {
             highlightLine.push(variable.id);
             // 자료구조 시각화에서 화살표에 넣을 코드를 넣는다
             arrowTexts.push(variable.code);
