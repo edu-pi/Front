@@ -1242,20 +1242,24 @@ header .group-btn {
   display: inline-flex;
   padding: 14px 15px 8px 20px;
   gap: 7px;
-  border-radius: 0 16px 16px 16px;
+  border-radius: 0 26px 26px 26px;
   box-shadow: 0 0 16px rgba(72, 102, 255, 0.2);
   font-weight: 500;
   z-index: 9999;
   background-color: #fff;
 }
+.gpt-hint{
+  margin-right: -15px;
+}
+
 .gpt-success {
   max-width: 400px;
   min-width: 300px;
-  margin: 10px 35px 17px 35px;
+  margin: 5px 40px 17px 35px;
 }
-.gpt-comment img {
-  width: 24px;
-  height: 24px;
+.gpt-success .container{
+  margin-top: -2px;
+  /*margin-right: 7px;*/
 }
 /* 도움 요청 floating 버튼 */
 .floating-buttons {
@@ -1404,12 +1408,15 @@ header .group-btn {
 .code-container {
   display: flex;
   font-family: "Consolas", monospace;
-  background-color: #ffffff;
+  background-color: #fafafa;
   border-radius: 4px;
-  overflow: hidden;
+  overflow: scroll;
+
   font-size: 14px;
   border: 1px solid #e1e4e8;
   margin-top: 13px;
+
+  max-height: 300px;
 }
 
 .gpt-line-numbers {
@@ -1427,7 +1434,7 @@ header .group-btn {
   flex-grow: 1;
   padding: 0em 1em;
 
-  color: #24292e;
+  /*color: #24292e;*/
   position: relative;
 }
 
@@ -1437,9 +1444,10 @@ header .group-btn {
 }
 
 .ellipsis {
-  color: #a0a0a0;
+  /*color: #a0a0a0;*/
   text-align: center;
   position: relative;
+  margin: 20px 0px;
 }
 
 .code-content .ellipsis::before {
@@ -1482,20 +1490,21 @@ header .group-btn {
   gap: 6px;
 }
 .button-left button {
-  padding: 8px 20px;
+  padding: 5px 20px;
   border-radius: 6px;
 
+  font-size: 14px;
   font-weight: 500;
   cursor: pointer;
   border: 1px solid transparent;
   display: flex;
+  padding-top : 7px;
 }
 
 .button-left .approve {
   background-color: #15a461;
   border-color: #15a461;
-
-  font-weight: bolder;
+  font-weight: 500;
   color: #ffffff;
 }
 .button-left .approve:hover {
@@ -1510,18 +1519,24 @@ header .group-btn {
 }
 .highlighted-code {
   font-family: monospace;
-  white-space: pre;
-  background-color: #f0f0f0;
-  overflow: auto;
+  background-color: #FAFAFA;
 
   border-radius: 5px;
+  padding-top: 15px;
   width: 100%;
+
+}
+.highlighted-code pre {
+  margin: -5px 20px !important;
+  padding: 0.3em !important;
+  overflow: hidden !important;
 }
 .instant-correction {
+  margin-top: -4px;
   padding: 8px 16px;
+  padding-top: 12px;
   border-radius: 6px;
   font-size: 14px;
-  font-weight: 500;
   cursor: pointer;
   border: 1px solid transparent;
   display: flex;
@@ -1529,14 +1544,15 @@ header .group-btn {
   width: 108px;
   height: 35px;
   gap: 6px;
-  background-color: #4caf50;
-  border-color: #4caf50;
-  font-weight: bolder;
+  background-color: #5C48FA;
+  font-weight: 500;
   color: #ffffff;
 }
 
 .view-hint {
+  margin-top: -4px;
   padding: 8px 16px;
+  padding-top: 12px;
   border-radius: 6px;
   font-size: 14px;
   width: 108px;
@@ -1546,15 +1562,18 @@ header .group-btn {
   display: flex;
   align-items: center;
   gap: 4px;
-  background-color: #ffc107;
-  border-color: #ffc107;
+  background-color: #ffffff;
+  border-color: #5C48FA;
+  border-width: 2px;
   font-weight: bolder;
-  color: #ffffff;
+  color: #5C48FA;
 }
 .gpt-icon {
   position: absolute;
-  left: 12px;
-  top: 18px;
+  left: 16px;
+  top: 20px;
+  width: 25px;
+  height: 25px;
 }
 .gpt-icon-hint {
   position: absolute;
@@ -1565,4 +1584,20 @@ gpt-icon-small {
   position: absolute;
   left: 12px;
   top: 18px;
+}
+
+.call-stack-box {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px;
+  height: 300px;
+  width: 500px;
+  background-color: #f9fafb;
+  border: 1px solid #e1e4e8;
+  margin-top: 20px;
+}
+.call-stack-name {
+  font-size: 16px;
+  font-weight: 600;
 }

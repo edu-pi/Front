@@ -18,6 +18,8 @@ import { PrintItem } from "@/pages/Visualization/types/codeFlow/printItem";
 import { VariableDto } from "@/pages/Visualization/types/dto/variableDto";
 import { WhileDto } from "@/pages/Visualization/types/dto/whileDto";
 import { AllDataStructureItem } from "@/pages/Visualization/types/dataStructuresItem/allDataStructureItem";
+import { WarperDataStructureItem } from "@/pages/Visualization/types/dataStructuresItem/warperDataStructureItem";
+
 // services폴더에서 가져온 함수
 import { addCodeFlow } from "./services/addCodeFlow";
 import { insertIntoDepth } from "./services/insertIntoDepth";
@@ -53,7 +55,7 @@ const RightSection = () => {
       objects: [{ id: 0, type: "start", depth: 0, isLight: false, child: [] }],
     },
   ]);
-  const [StructuresList, setStructuresList] = useState<AllDataStructureItem[][]>([[]]); // 변수 데이터 시각화 리스트의 변화과정을 담아두는 리스트
+  const [StructuresList, setStructuresList] = useState<any>([]); // 변수 데이터 시각화 리스트의 변화과정을 담아두는 리스트
   const context = useContext(PreprocessedCodesContext); // context API로 데이터 가져오기
   if (!context) {
     throw new Error("CodeContext not found"); //context가 없을 경우 에러 출력 패턴 처리안해주면 에러 발생
@@ -126,9 +128,12 @@ const RightSection = () => {
     let accCodeFlow: State = {
       objects: [{ id: 0, type: "start", depth: 0, isLight: false, child: [] }],
     };
-    let accDataStructures: AllDataStructureItem[] = [];
+    let accDataStructures: WarperDataStructureItem = {
+      main: [],
+    };
+
     const accCodeFlowList: State[] = [];
-    const accDataStructuresList: AllDataStructureItem[][] = [];
+    const accDataStructuresList: AllDataStructureItem = [];
     const accConsoleLogList: string[] = [];
     let accConsoleLog: string = "";
     const arrowTexts: string[] = [];
@@ -137,30 +142,41 @@ const RightSection = () => {
       if (preprocessedCode.type.toLowerCase() === "whiledefine") {
         continue;
       }
+
       // 자료구조 시각화 부분이 들어왔을 때
       if (preprocessedCode.type.toLowerCase() === "assign".toLowerCase()) {
-        (preprocessedCode as VariablesDto).variables.forEach((variable: VariableDto) => {
-          highlightLine.push(variable.id);
-          // 자료구조 시각화에서 화살표에 넣을 코드를 넣는다
-          arrowTexts.push(variable.code);
+        const callStack = (preprocessedCode as VariablesDto).callStack;
+        // 오른쪽에 변수로 함수를 넣을 때
+        if ((preprocessedCode as VariablesDto).variables[0].type.toLowerCase() === "function".toLowerCase()) {
+          const { id, expr, name, code, type } = (preprocessedCode as VariablesDto).variables[0];
+          accDataStructures[callStack].push({ id, expr, name, code, type });
+        } else {
+          (preprocessedCode as VariablesDto).variables.forEach((variable: VariableDto) => {
+            highlightLine.push(variable.id);
+            // 자료구조 시각화에서 화살표에 넣을 코드를 넣는다
+            arrowTexts.push(variable.code);
 
-          // 이미 한번 자료구조 시각화에 표현된 name인 경우
-          if (usedName.includes(variable.name!)) {
-            const targetName = variable.name!;
+            // 이미 한번 자료구조 시각화에 표현된 name인 경우
+            if (usedName.includes(variable.name!)) {
+              const targetName = variable.name!;
 
-            accDataStructures = updateDataStructure(targetName, accDataStructures, variable);
-          }
-          // 처음 시각화해주는 자료구조인 경우
-          else {
-            accDataStructures.push(variable as AllDataStructureItem);
-            usedName.push(variable.name!);
-          }
+              accDataStructures = updateDataStructure(targetName, accDataStructures, variable, callStack);
+            }
+            // 처음 시각화해주는 자료구조인 경우
+            else {
+              accDataStructures.callStack.push(variable);
+              usedName.push(variable.name!);
+            }
 
-          // 코드 흐름 시각화에서 표현된 자료구조 시각화 객체를 삭제하는 부분
-          let deletedCodeFlow = deleteCodeFlow(accCodeFlow.objects, variable.id!);
-          usedId = usedId.filter((id) => id !== variable.id);
-          accCodeFlow = { objects: deletedCodeFlow };
-        });
+            // 코드 흐름 시각화에서 표현된 자료구조 시각화 객체를 삭제하는 부분
+            let deletedCodeFlow = deleteCodeFlow(accCodeFlow.objects, variable.id!);
+            usedId = usedId.filter((id) => id !== variable.id);
+            accCodeFlow = { objects: deletedCodeFlow };
+          });
+        }
+      }
+      // 함수 생성으로 새로운 함수 콜스택이 나올 떄
+      else if (preprocessedCode.type.toLowerCase() === "createCallStack".toLowerCase()) {
       }
       // 코드 시각화 부분이 들어왔을 때
       else {
@@ -265,14 +281,17 @@ const RightSection = () => {
         });
       }
 
-      // toLightStructures 를 참고해서 데이터 구조 시각화 데이터 속성 중 isLight가 true인지 false인지 판단해주는 부분
-      accDataStructures = accDataStructures.map((structure) => ({
-        ...structure,
-        isLight: toLightStructures?.includes(structure.name), // toLightStructures 에 자료구조 name이 있으면 isLight를 true로 바꿔준다
-      }));
+      accDataStructures = Object.keys(accDataStructures).reduce((acc, key) => {
+        acc[key] = accDataStructures[key].map((structure) => ({
+          ...structure,
+          isLight: toLightStructures?.includes(structure.name), // toLightStructures에 자료구조 이름이 있으면 isLight를 true로 설정
+        }));
+        return acc;
+      }, {} as WarperDataStructureItem);
 
       // 자료구조리스트에서 얕은 복사 문제가 생겨서 깊은 복사를 해준다
       const deepCloneStructures = _.cloneDeep(accDataStructures);
+
       accDataStructuresList.push(deepCloneStructures);
       accCodeFlowList.push(accCodeFlow);
       accConsoleLogList.push(accConsoleLog);

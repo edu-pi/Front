@@ -1,7 +1,8 @@
 import { http, HttpResponse, delay } from "msw";
 import * as jose from "jose";
-import testResponseBody from "./samples/testResponseBody.json";
-
+import testResponseBody from "./samples/testResponseBody";
+import UDFResponseBody from "./samples/UDFResponseBody";
+import UDFResPiece from "./samples/UDFResPiece";
 const JWT_SECRET = new TextEncoder().encode("your_jwt_secret_key");
 
 async function generateToken(userId: string) {
@@ -34,7 +35,7 @@ export const handlers = [
   //       success: false,
   //       code: "CS-200000",
   //       detail: "success code analysis",
-  //       result: { code: testResponseBody },
+  //       result: { code: UDFResPiece },
   //     },
   //     {
   //       status: 200,
@@ -273,11 +274,11 @@ export const handlers = [
       code: "CS-200000",
       detail: "success correct",
       result: {
-        reason: "코드에서 반복문을 잘못 작성하여 오류가 발생했습니다.",
+        reason: "코드에서 반복문을 잘못 작성하여 오류가 발생했습니다. i를 선언하고 반복문을 실행하세요",
         modified_codes: [
           {
             line: 1,
-            code: "for i in range(10):",
+            code: "for i in range(10):for i in range(10):",
           },
           {
             line: 2,

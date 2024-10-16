@@ -246,11 +246,6 @@ const CodeEditor = () => {
           }}
         />
         <style>{`
-          .red-thick-underline {
-            text-decoration: underline;
-            text-decoration-color: red;
-            text-decoration-thickness: 3px;
-          }
           .error-line {
             background-color: rgba(255, 0, 0, 0.1);
           }
