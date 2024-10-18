@@ -52,7 +52,7 @@ export default function Visualization() {
   const decrementStepIdx = useConsoleStore((state) => state.decrementStepIdx);
   const codeFlowLength = useCodeFlowLengthStore((state) => state.codeFlowLength);
   const setDisplayNone = useArrowStore((state) => state.setDisplayNone);
-  const loggedInUserName = useUserStore((state) => state.loggedInUserName);
+  const userName = useUserStore((state) => state.userName);
   const setErrorLine = useEditorStore((state) => state.setErrorLine);
   const { focus } = useEditorStore();
   const isGptToggle = useGptTooltipStore((state) => state.isGptToggle);
@@ -128,7 +128,7 @@ export default function Visualization() {
   return (
     <CodeContext.Provider value={{ code, setCode }}>
       <PreprocessedCodesContext.Provider value={{ preprocessedCodes, setPreprocessedCodes }}>
-        {loggedInUserName === "" ? <PublicHeader /> : <LoggedInHeader />}
+        {userName === "" ? <PublicHeader /> : <LoggedInHeader />}
 
         <main className={styles.main}>
           {focus && gptPin ? <GptIcon /> : (gptPin || isGptToggle) && <GptComment />}

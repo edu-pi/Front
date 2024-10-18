@@ -3,7 +3,7 @@ import { useUserStore } from "@/store/user";
 import { fetchLogout } from "@/services/api";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 const LoggedInHeader = () => {
-  const loggedInUserName = useUserStore((state) => state.loggedInUserName);
+  const userName = useUserStore((state) => state.userName);
   const resetUser = useUserStore((state) => state.resetUser);
   const navigate = useNavigate();
   const logout = async () => {
@@ -32,7 +32,7 @@ const LoggedInHeader = () => {
       </div>
 
       <div>
-        {loggedInUserName === "" ? null : <span style={{ marginRight: "10px" }}>{loggedInUserName}님</span>}
+        {userName === "" ? null : <span style={{ marginRight: "10px" }}>{userName}님</span>}
         <span onClick={logout} className={styles["logout"]}>
           <span>로그아웃</span>
         </span>

@@ -19,10 +19,10 @@ interface GroupData {
     guests: Classroom[];
   };
 }
-const ClassroomSpace = () => {
+const ClassroomDashboard = () => {
   const isMswReady = useMswReadyStore((state) => state.isMswReady);
-  const LoggedInUserName = useUserStore((state) => state.loggedInUserName);
-  const LoggedInUserEmail = useUserStore((state) => state.loggedInUserEmail);
+  const userName = useUserStore((state) => state.userName);
+  const userEmail = useUserStore((state) => state.userEmail);
   const params = useParams();
   const classroomId = Number(params.classroomId);
 
@@ -76,8 +76,8 @@ const ClassroomSpace = () => {
       <div className="group-data-wrap">
         <div className="group-data-left">
           <div className="user-info">
-            <p>{LoggedInUserName}님</p>
-            <span>{LoggedInUserEmail}</span>
+            <p>{userName}님</p>
+            <span>{userEmail}</span>
             <ul className="user-group-data">
               <li>
                 <p>강의방 수</p>
@@ -143,4 +143,4 @@ const ClassroomSpace = () => {
     </div>
   );
 };
-export default ClassroomSpace;
+export default ClassroomDashboard;

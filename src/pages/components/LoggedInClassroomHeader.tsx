@@ -7,7 +7,7 @@ import { Link, NavLink, useNavigate, useParams } from "react-router-dom";
 const LoggedInClassroomHeader = () => {
   const params = useParams();
   const resetUser = useUserStore((state) => state.resetUser);
-  const loggedInUserName = useUserStore((state) => state.loggedInUserName);
+  const userName = useUserStore((state) => state.userName);
   const navigate = useNavigate();
   const logout = async () => {
     try {
@@ -67,7 +67,7 @@ const LoggedInClassroomHeader = () => {
         >
           <span>로그아웃</span>
         </button>
-        {loggedInUserName === "" ? null : <span>{loggedInUserName}님</span>}
+        {userName === "" ? null : <span>{userName}님</span>}
       </div>
     </header>
   );

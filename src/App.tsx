@@ -7,7 +7,7 @@ import Signup from "./pages/Signup/Signup";
 import Login from "./pages/Login/Login";
 import Home from "./pages/Home/Home";
 import Manage from "./pages/Manage/Manage";
-import ClassroomSpace from "./pages/ClassroomSpace/ClassroomSpace";
+import ClassroomDashboard from "./pages/ClassroomDashboard/ClassroomDashboard";
 import Assginment from "./pages/Assignment/Assignment";
 import Clssroom from "./pages/Classroom/Classroom";
 import AuthEmail from "./pages/AuthEmail/AuthEmail";
@@ -42,15 +42,15 @@ function App() {
   }, [setIsMswReady]);
 
   const { data } = useQuery<User>({ queryKey: ["user"], queryFn: getUser, enabled: isMswReady });
-  const setLoggedInUserEmail = useUserStore((state) => state.setLoggedInUserEmail);
-  const setLoggedInUserName = useUserStore((state) => state.setLoggedInUserName);
-  const setLoggedInUserRole = useUserStore((state) => state.setLoggedInUserRole);
+  const setUserEmail = useUserStore((state) => state.setUserEmail);
+  const setUserName = useUserStore((state) => state.setUserName);
+  const setUserRole = useUserStore((state) => state.setUserRole);
 
   useEffect(() => {
     if (data) {
-      setLoggedInUserEmail(data.email);
-      setLoggedInUserName(data.name);
-      setLoggedInUserRole(data.role);
+      setUserEmail(data.email);
+      setUserName(data.name);
+      setUserRole(data.role);
     }
   }, [data]);
 
@@ -59,14 +59,14 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/viz" element={<Visualization />} />
-        <Route path="/classroomspace/classroom/viz/:classroomId" element={<VisualizationClassroom />} />
+        <Route path="/classroomdashboard/classroom/viz/:classroomId" element={<VisualizationClassroom />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/classroomspace/classroom/manage/:classroomId" element={<Manage />} />
-        <Route path="/classroomspace" element={<ClassroomSpace />} />
+        <Route path="/classroomdashboard/classroom/manage/:classroomId" element={<Manage />} />
+        <Route path="/classroomdashboard" element={<ClassroomDashboard />} />
         <Route path="/assignment" element={<Assginment />} />
         <Route path="/auth/email" element={<AuthEmail />} />
-        <Route path="/classroomspace/classroom/:classroomId" element={<Clssroom />} />
+        <Route path="/classroomdashboard/classroom/:classroomId" element={<Clssroom />} />
       </Routes>
     </Router>
   );

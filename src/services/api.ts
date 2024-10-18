@@ -97,7 +97,7 @@ export const getClassGuestData = async (classroomId: number) => {
   }
 };
 
-export const getClassTotalActionInfo = async (classroomId: number) => {
+export const getTotalActionInfo = async (classroomId: number) => {
   try {
     const response = await fetch(`http://localhost:8080/edupi-lms/v1/classroom/info?classroomId=${classroomId}`, {
       method: "GET",
