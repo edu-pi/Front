@@ -122,30 +122,24 @@ export const createObjectToAdd = (
       return {
         ...baseObject,
         type: "while",
-        highlights: [],
         expr: (preprocessedCode as WhileDto).expr,
       };
     case "calluserfunc":
       return {
         ...baseObject,
-
-        highlights: [],
         assignName: (preprocessedCode as CallUserFuncDto).assignName,
         signature: (preprocessedCode as CallUserFuncDto).signature,
       };
     case "return":
       return {
         ...baseObject,
-
-        highlights: [],
-        returnName: (preprocessedCode as ReturnDto).returnName,
-        returnValue: (preprocessedCode as ReturnDto).returnValue,
+        returnExpr: (preprocessedCode as ReturnDto).returnExpr,
       };
     case "enduserfunc":
       return {
         ...baseObject,
         type: "variable",
-        name: (preprocessedCode as EndUserFuncDto).name,
+        name: (preprocessedCode as EndUserFuncDto).returnName,
         expr: (preprocessedCode as EndUserFuncDto).returnExpr,
       };
     default:

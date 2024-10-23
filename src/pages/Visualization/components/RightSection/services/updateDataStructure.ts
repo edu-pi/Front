@@ -8,8 +8,11 @@ export const updateDataStructure = (
 ): WarperDataStructureItem => {
   return {
     ...dataStructures,
-    [callStack]: dataStructures[callStack].map((dataStructure) => {
-      return dataStructure.name === targetName ? { ...dataStructure, ...newData } : dataStructure;
-    }),
+    [callStack]: {
+      ...dataStructures[callStack],
+      data: dataStructures[callStack].data.map((dataStructure) => {
+        return dataStructure.name === targetName ? { ...dataStructure, ...newData } : dataStructure;
+      }),
+    },
   };
 };

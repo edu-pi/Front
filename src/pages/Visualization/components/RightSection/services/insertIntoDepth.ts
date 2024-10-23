@@ -1,9 +1,4 @@
-import { AllObjectItem } from "@/pages/Visualization/types/codeFlow/allObjectItem";
-export const insertIntoDepth = (
-  codeFlows: AllObjectItem[],
-  toAddObject: AllObjectItem,
-  prevTrackingId: number
-): AllObjectItem[] => {
+export const insertIntoDepth = (codeFlows: any[], toAddObject: any, prevTrackingId: number): any[] => {
   return codeFlows.map((codeFlow) => {
     if (codeFlow.id === prevTrackingId) {
       return {

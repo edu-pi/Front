@@ -1,10 +1,4 @@
-import { AllObjectItem } from "@/pages/Visualization/types/codeFlow/allObjectItem";
-
-export const insertEqualToDepth = (
-  codeFlows: AllObjectItem[],
-  toAddObject: AllObjectItem,
-  prevTrackingId: number
-): AllObjectItem[] => {
+export const insertEqualToDepth = (codeFlows: any[], toAddObject: any, prevTrackingId: number): any[] => {
   return codeFlows.flatMap((codeFlow) => {
     if (codeFlow.id === prevTrackingId) {
       return [codeFlow, toAddObject];

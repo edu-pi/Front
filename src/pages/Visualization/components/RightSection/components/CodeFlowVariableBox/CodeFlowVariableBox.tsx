@@ -56,7 +56,7 @@ const CodeFlowVariableBox = ({ codeFlowVariableItem, height, width }: Props) => 
             height={height}
             width={width}
           >
-            <span className={styles.text}>{expr}</span>
+            {expr ? <span className={styles.text}>{expr}</span> : null}
           </GetCodeFlowVariableBoxLocation>
         </div>
       </div>

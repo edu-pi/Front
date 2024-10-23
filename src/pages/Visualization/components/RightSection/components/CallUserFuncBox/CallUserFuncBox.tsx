@@ -9,21 +9,26 @@ interface CallUserFuncProps {
 }
 
 const CallUserFuncBox = ({ callUserFuncItem, children }: CallUserFuncProps): ReactNode => {
-  const { signature, isLight } = callUserFuncItem;
+  const { signature, assignName, isLight } = callUserFuncItem;
 
   return (
     <>
-      <div>
-        <div className={styles["return-val"]}>
-          <span>result</span>
-          <div className={cx(styles["var-data"], isLight && styles.highlight)}>
-            <div className={styles["box"]}></div>
+      {assignName == "" ? null : (
+        <>
+          <div>
+            <div className={styles["return-val"]}>
+              <span>{assignName}</span>
+              <div className={cx(styles["var-data"], isLight && styles.highlight)}>
+                <div className={styles["box"]}></div>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-      <div>
-        <img className={styles["func-arrow"]} src="/image/img_func_arrow.svg" alt="방향이미지" />
-      </div>
+          <div>
+            <img className={styles["func-arrow"]} src="/image/img_func_arrow.svg" alt="방향이미지" />
+          </div>
+        </>
+      )}
+
       <div className={styles["func-box"]}>
         <div className={styles["func-box-content"]}>
           <div className={styles["func-box-content-text"]}>{signature}</div>

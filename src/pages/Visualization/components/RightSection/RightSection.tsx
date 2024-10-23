@@ -21,6 +21,7 @@ import { AllDataStructureItem } from "@/pages/Visualization/types/dataStructures
 import { WarperDataStructureItem } from "@/pages/Visualization/types/dataStructuresItem/warperDataStructureItem";
 import { CreateCallStackDto } from "@/pages/Visualization/types/dto/createCallStackDto";
 import { EndUserFuncDto } from "@/pages/Visualization/types/dto/endUserFuncDto";
+import { usedNameObjectType } from "../../types/dataStructuresItem/usedNameObjectType";
 
 // services폴더에서 가져온 함수
 import { addCodeFlow } from "./services/addCodeFlow";
@@ -127,7 +128,7 @@ const RightSection = () => {
     let prevTrackingDepth: number = 0;
     let activate: ActivateItem[] = [];
     let usedId: number[] = [];
-    const usedName: string[] = [];
+    const usedName: usedNameObjectType = { main: [] };
     let accCodeFlow: State = {
       objects: [{ id: 0, type: "start", depth: 0, isLight: false, child: [] }],
     };
@@ -156,19 +157,17 @@ const RightSection = () => {
         return acc;
       }, {} as WarperDataStructureItem);
       // enduserFunc 타입이 들어왔을 때 코드흐름과 변수 부분 함수를 지우고 return value를 나타나게 한다
+      // 나타나고 바로 사라지는건 traking id와 depth를 사용하지 않는다
       if (preprocessedCode.type.toLowerCase() === "endUserFunc".toLowerCase()) {
         const delName = (preprocessedCode as EndUserFuncDto).delFuncName;
         delete accDataStructures[delName]; // 함수 이름을 키로 가지는 객체를 삭제
-
+        delete usedName[delName];
         const toAddObject = createObjectToAdd(preprocessedCode as EndUserFuncDto);
-        usedId = usedId.filter((id) => id !== (preprocessedCode as EndUserFuncDto).delFuncId);
-        usedId.push(toAddObject.id);
 
         // isLight를 true로 바꿔준다
         toAddObject.isLight = true;
-
         let finallyCodeFlow: any;
-        let deletedCodeFlow = deleteCodeFlow(accCodeFlow.objects, (preprocessedCode as EndUserFuncDto).delFuncId);
+        let deletedCodeFlow = deleteCodeFlow(accCodeFlow.objects, (preprocessedCode as EndUserFuncDto).id);
         accCodeFlow = { objects: deletedCodeFlow };
         if (toAddObject.depth > prevTrackingDepth) {
           finallyCodeFlow = insertIntoDepth(accCodeFlow.objects, toAddObject, prevTrackingId);
@@ -179,12 +178,10 @@ const RightSection = () => {
         }
 
         accCodeFlow = { objects: finallyCodeFlow };
-
-        prevTrackingId = toAddObject.id;
-        prevTrackingDepth = toAddObject.depth;
         arrowTexts.push((preprocessedCode as EndUserFuncDto).code);
       }
       // 자료구조 시각화 부분이 들어왔을 때
+      // 나타나고 바로 사라지는건 traking id와 depth를 사용하지 않는다ㄴ
       else if (preprocessedCode.type.toLowerCase() === "assign".toLowerCase()) {
         const callStackName = (preprocessedCode as VariablesDto).callStackName;
         // 오른쪽에 변수로 함수를 넣을 때
@@ -198,17 +195,17 @@ const RightSection = () => {
             highlightLine.push(variable.id);
             // 자료구조 시각화에서 화살표에 넣을 코드를 넣는다
             arrowTexts.push(variable.code);
-
             // 이미 한번 자료구조 시각화에 표현된 name인 경우
-            if (usedName.includes(variable.name!)) {
+            if (usedName[callStackName].includes(variable.name!)) {
               const targetName = variable.name!;
 
               accDataStructures = updateDataStructure(targetName, accDataStructures, variable, callStackName);
+              console.log(accDataStructures);
             }
             // 처음 시각화해주는 자료구조인 경우
             else {
               accDataStructures[callStackName].data.push(variable);
-              usedName.push(variable.name!);
+              usedName[callStackName].push(variable.name!);
             }
 
             // 코드 흐름 시각화에서 표현된 자료구조 시각화 객체를 삭제하는 부분
@@ -231,6 +228,7 @@ const RightSection = () => {
         arrowTexts.push((preprocessedCode as CreateCallStackDto).code);
 
         accDataStructures[(preprocessedCode as CreateCallStackDto).callStackName].isLight = true;
+        usedName[(preprocessedCode as CreateCallStackDto).callStackName] = [];
       }
 
       // 코드 시각화 부분이 들어왔을 때
@@ -268,6 +266,7 @@ const RightSection = () => {
             }
 
             accCodeFlow = { objects: finallyCodeFlow };
+
             prevTrackingId = toAddObject.id;
             prevTrackingDepth = toAddObject.depth;
           }
@@ -282,6 +281,7 @@ const RightSection = () => {
           const toAddObject = createObjectToAdd(
             preprocessedCode as ForDto | PrintDto | IfElseChangeDto | CodeFlowVariableDto
           );
+
           // print 타입일 때 console창의 로그를 만드는 부분
           if ((toAddObject as PrintItem).type === "print") {
             const printObject = toAddObject as PrintItem;
@@ -316,7 +316,6 @@ const RightSection = () => {
           const finallyCodeFlow = turnLight(changedCodeFlows, activate);
 
           accCodeFlow = { objects: finallyCodeFlow };
-
           if (toAddObject.type !== "variable" && toAddObject.type !== "list") {
             prevTrackingDepth = (
               preprocessedCode as ForDto | PrintDto | IfElseChangeDto | CodeFlowVariableDto | WhileDto

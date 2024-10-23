@@ -1,6 +1,7 @@
 import { http, HttpResponse, delay } from "msw";
 import * as jose from "jose";
 import testResponseBody from "./samples/testResponseBody";
+import defIfElseResponseBody from "./samples/defIfElseResponseBody";
 import UDFResponseBody from "./samples/UDFResponseBody";
 import UDFResPiece from "./samples/UDFResPiece";
 const JWT_SECRET = new TextEncoder().encode("your_jwt_secret_key");
@@ -35,7 +36,7 @@ export const handlers = [
         success: false,
         code: "CS-200000",
         detail: "success code analysis",
-        result: { code: UDFResPiece },
+        result: { code: testResponseBody },
       },
       {
         status: 200,

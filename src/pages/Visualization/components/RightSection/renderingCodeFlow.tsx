@@ -1,5 +1,4 @@
 import { useRef, useEffect, ReactNode } from "react";
-import { AllObjectItem } from "@/pages/Visualization/types/codeFlow/allObjectItem";
 import { AnimatePresence, motion } from "framer-motion";
 import { ReactElement } from "react";
 import PrintBox from "./components/PrintBox/PrintBox";
@@ -26,7 +25,7 @@ import { ReturnItem } from "@/pages/Visualization/types/codeFlow/returnItem";
 import { useArrowStore } from "@/store/arrow";
 
 interface Props {
-  codeFlow: AllObjectItem;
+  codeFlow: any;
   children?: ReactNode;
   width: number;
   height: number;
@@ -50,7 +49,7 @@ const CodeFlowItem = ({ codeFlow, width, height, children }: Props) => {
   );
 };
 
-export const renderingCodeFlow = (codeFlows: AllObjectItem[], width: number, height: number): ReactElement => {
+export const renderingCodeFlow = (codeFlows: any[], width: number, height: number): ReactElement => {
   return (
     <>
       {codeFlows.map((codeFlow, index) => {

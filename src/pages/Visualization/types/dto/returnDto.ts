@@ -1,7 +1,6 @@
 export interface ReturnDto {
   id: number;
-  returnName: string; // 변수가 반환되면 값이 들어옴
-  returnValue: string;
+  returnExpr: string;
   code: string;
   depth: number;
   type: string;
@@ -10,8 +9,7 @@ export interface ReturnDto {
 export const isReturnDto = (item: any): item is ReturnDto => {
   return (
     typeof item.id === "number" &&
-    typeof item.returnName === "string" &&
-    typeof item.returnValue === "string" &&
+    typeof item.returnExpr === "string" &&
     typeof item.code === "string" &&
     typeof item.depth === "number" &&
     typeof item.type === "string"

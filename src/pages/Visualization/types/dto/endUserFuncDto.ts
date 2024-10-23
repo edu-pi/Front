@@ -1,7 +1,7 @@
 export interface EndUserFuncDto {
   id: number;
   returnExpr: string; // 반환값이 없으면 빈문자열
-  name: string;
+  returnName: string;
   depth: number;
   code: string;
   type: string;

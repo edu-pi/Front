@@ -55,21 +55,20 @@ const UDFResPiece = [
   },
   {
     id: 5,
-    returnName: "", // 변수가 반환되면 값이 들어옴
-    returnValue: "True",
+    returnExpr: "True",
     code: "return True",
     depth: 3,
     type: "return",
   },
   {
     id: 5,
-    returnExpr: "True", // 반환값이 없으면 빈문자열
     depth: 1,
-    name: "result",
+    returnExpr: "True", // 반환값이 없으면 빈문자열
+    returnArgName: "result",
     code: "return True",
-    type: "endUserFunc",
     delFuncName: "isEven",
     delFuncId: 1,
+    type: "endUserFunc",
   },
   {
     variables: [
