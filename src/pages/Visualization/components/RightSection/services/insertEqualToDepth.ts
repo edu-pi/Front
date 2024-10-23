@@ -13,8 +13,7 @@ export const insertEqualToDepth = (
         ...codeFlow,
         child: insertEqualToDepth(codeFlow.child, toAddObject, prevTrackingId),
       };
-    } else {
-      return codeFlow;
     }
+    return codeFlow;
   });
 };

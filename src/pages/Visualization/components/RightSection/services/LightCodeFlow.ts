@@ -2,7 +2,7 @@ import { ActivateItem } from "@/pages/Visualization/types/activateItem";
 import { AllObjectItem } from "@/pages/Visualization/types/codeFlow/allObjectItem";
 
 // 하이라이트 효과를 줘야하는 부분을 표시해주는 함수
-export const turnLight = (
+export const LightCodeFlow = (
   codeFlows: AllObjectItem[], //비주얼 스택
   Activate: ActivateItem[] //활성화 스택
 ): AllObjectItem[] => {
@@ -12,16 +12,15 @@ export const turnLight = (
       return {
         ...codeFlow,
         isLight: true,
-        child: turnLight(codeFlow.child, Activate),
+        child: LightCodeFlow(codeFlow.child, Activate),
       };
     } else if (codeFlow.child && codeFlow.child.length > 0) {
       return {
         ...codeFlow,
         isLight: false,
-        child: turnLight(codeFlow.child, Activate),
+        child: LightCodeFlow(codeFlow.child, Activate),
       };
-    } else {
-      return { ...codeFlow, isLight: false };
     }
+    return { ...codeFlow, isLight: false };
   });
 };

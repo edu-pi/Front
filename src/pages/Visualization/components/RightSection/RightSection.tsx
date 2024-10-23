@@ -27,7 +27,7 @@ import { addCodeFlow } from "./services/addCodeFlow";
 import { insertIntoDepth } from "./services/insertIntoDepth";
 import { insertEqualToDepth } from "./services/insertEqualToDepth";
 import { updateCodeFlow } from "./services/updateCodeFlow";
-import { turnLight } from "./services/turnLight";
+import { LightCodeFlow } from "./services/LightCodeFlow";
 import { createObjectToAdd } from "./services/createObjectToAdd";
 import { updateDataStructure } from "./services/updateDataStructure";
 import { updateActivate } from "./services/updateActivate";
@@ -35,7 +35,6 @@ import { turnOffAllNodeLight } from "./services/turnOffAllNodeLight";
 import { findTargetChild } from "./services/findTargetChild";
 import { findDeleteUsedId } from "./services/findDeleteUsedId";
 import { unLightCodeFlow } from "./services/unLightCodeFlow";
-
 //rendUtils에서 가져온 함수
 import { renderingStructure } from "./renderingStructure";
 import { renderingCodeFlow } from "./renderingCodeFlow";
@@ -313,7 +312,7 @@ const RightSection = () => {
             }
           }
           activate = updateActivate(activate, toAddObject);
-          const finallyCodeFlow = turnLight(changedCodeFlows, activate);
+          const finallyCodeFlow = LightCodeFlow(changedCodeFlows, activate);
 
           accCodeFlow = { objects: finallyCodeFlow };
 

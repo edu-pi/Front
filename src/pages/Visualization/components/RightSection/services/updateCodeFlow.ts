@@ -28,8 +28,7 @@ export const updateCodeFlow = (
       };
     }
     // 끝까지 찾아도 없으면 그냥 객체를 반환한다
-    else {
-      return codeFlow;
-    }
+
+    return codeFlow;
   });
 };

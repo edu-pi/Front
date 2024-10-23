@@ -6,8 +6,7 @@ export const unLightCodeFlow = (accCodeFlow: any) => {
         isLight: false,
         child: unLightCodeFlow(codeFlow.child),
       };
-    } else {
-      return { ...codeFlow, isLight: false };
     }
+    return { ...codeFlow, isLight: false };
   });
 };
