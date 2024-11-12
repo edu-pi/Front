@@ -70,6 +70,12 @@ const LoggedInHeader = () => {
                 >
                   클래스룸
                 </NavLink>
+                <NavLink
+                  to={`/classroomdashboard/classroom/viz/${classroomId}`}
+                  className={({ isActive }) => (isActive ? styles["on_active"] : "")}
+                >
+                  시각화
+                </NavLink>
                 {isHost && (
                   <NavLink
                     to={`/classroomdashboard/classroom/${classroomId}`}
@@ -80,12 +86,6 @@ const LoggedInHeader = () => {
                   </NavLink>
                 )}
 
-                <NavLink
-                  to={`/classroomdashboard/classroom/viz/${classroomId}`}
-                  className={({ isActive }) => (isActive ? styles["on_active"] : "")}
-                >
-                  시각화
-                </NavLink>
                 {isHost && (
                   <NavLink
                     to={`/classroomdashboard/classroom/manage/${classroomId}`}
