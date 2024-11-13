@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, createContext, useState } from "react";
 import { CodeContext } from "../../context/CodeContext";
 import { Fragment } from "react/jsx-runtime";
 import styles from "./LeftSection.module.css";
@@ -12,19 +12,43 @@ import { useConsoleStore, useCodeFlowLengthStore } from "@/store/console";
 import { useEditorStore } from "@/store/editor";
 import { PreprocessedCodesContext } from "../../context/PreProcessedCodesContext";
 // 성공 응답 타입 정의
+interface InputErrorContextType {
+  isInputError: boolean;
+  setIsInputError: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
+const InputErrorContext = createContext<InputErrorContextType | undefined>(undefined);
+
+export const useInputError = () => {
+  const context = useContext(InputErrorContext);
+  if (!context) {
+    throw new Error("useInputError must be used within InputErrorProvider");
+  }
+  return context;
+};
+
+interface InputErrorProviderProps {
+  children: React.ReactNode;
+  value: InputErrorContextType; // value prop 추가
+}
+
+export const InputErrorProvider = ({ children, value }: InputErrorProviderProps) => {
+  return <InputErrorContext.Provider value={value}>{children}</InputErrorContext.Provider>;
+};
 const LeftSection = () => {
   const preprocessedCodesContext = useContext(PreprocessedCodesContext); // context API로 데이터 가져오기
 
   if (!preprocessedCodesContext) {
     throw new Error("preprocessedCodesContext not found"); //context가 없을 경우 에러 출력 패턴 처리안해주면 에러 발생
   }
+
   const setErrorLine = useEditorStore((state) => state.setErrorLine);
   const setConsole = useConsoleStore((state) => state.setConsole);
   const setStepIdx = useConsoleStore((state) => state.setStepIdx);
   const { setPreprocessedCodes } = preprocessedCodesContext;
   const setCodeFlowLength = useCodeFlowLengthStore((state) => state.setCodeFlowLength);
   const setHighlightLines = useEditorStore((state) => state.setHighlightLines);
+  const [isInputError, setIsInputError] = useState(false);
 
   const { inputData } = useConsoleStore();
   const codeContext = useContext(CodeContext);
@@ -50,6 +74,9 @@ const LeftSection = () => {
       } else if ((error as any).code === "CA-400006" || (error as any).code === "CA-400999") {
         alert("지원하지 않는 코드가 포함되어 있습니다");
         return;
+      } else if ((error as any).code === "CA-400005") {
+        alert("입력된 input의 갯수가 적습니다.");
+        setIsInputError(true);
       } else if ((error as any).code === "CA-400002") {
         // 잘못된 문법 에러처리
         const linNumber = Number((error as any).result.lineNumber);
@@ -68,6 +95,7 @@ const LeftSection = () => {
   const handleRunCode = () => {
     mutation.mutate({ code, inputData });
   };
+
   return (
     <Fragment>
       <div style={{ display: "flex", flexDirection: "column" }}>
@@ -101,7 +129,9 @@ const LeftSection = () => {
           className={styles.splitContainer}
         >
           <CodeEditor />
-          <Console />
+          <InputErrorProvider value={{ isInputError, setIsInputError }}>
+            <Console />
+          </InputErrorProvider>
         </Split>
       </div>
     </Fragment>
