@@ -1,11 +1,16 @@
+import { useContext } from "react";
 import { useConsoleStore } from "@/store/console";
-import { useInputError } from "@/pages/Visualization/components/LeftSection/LeftSection";
+import { InputErrorContext } from "@/pages/Visualization/context/InputErrorContext";
 import cx from "classnames";
 import styles from "./Console.module.css";
 
 const Console = () => {
   const consoleText = useConsoleStore((state) => state.consoleList);
-  const { isInputError, setIsInputError } = useInputError();
+  const inputErrorContext = useContext(InputErrorContext);
+  if (!inputErrorContext) {
+    throw new Error("InputErrorContext not found");
+  }
+  const { isInputError, setIsInputError } = inputErrorContext;
   const stepIdx = useConsoleStore((state) => state.stepIdx);
   const { inputData, setInputData } = useConsoleStore();
   const handleConsoleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -19,7 +24,7 @@ const Console = () => {
   };
   return (
     <div className={styles["view-section1-2"]}>
-      <p className={styles["view-section-title"]}>Console</p>
+      Ò<p className={styles["view-section-title"]}>Console</p>
       <textarea
         className={cx(styles["input-area"], isInputError && styles["input-error"])}
         value={inputData}

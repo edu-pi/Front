@@ -54,6 +54,8 @@ import { AppendDto } from "../../types/dto/appendDto";
 import { useMutation } from "@tanstack/react-query";
 import { useArrowStore } from "@/store/arrow";
 
+//context API
+import { InputErrorContext } from "@/pages/Visualization/context/InputErrorContext";
 //api
 import { visualize } from "@/services/api";
 import { CodeFlowVariableItem } from "../../types/codeFlow/codeFlowVariableItem";
@@ -110,6 +112,11 @@ const RightSection = () => {
   const height = useRightSectionStore((state) => state.height);
   const setHighlightLines = useEditorStore((state) => state.setHighlightLines);
 
+  const inputErrorContext = useContext(InputErrorContext);
+  if (!inputErrorContext) {
+    throw new Error("InputErrorContext not found");
+  }
+  const { setIsInputError } = inputErrorContext;
   //위에 시각화 조절 버튼 상태관리
   const [isPlaying, setIsPlaying] = useState(false);
   const resetConsole = useConsoleStore((state) => state.resetConsole);
@@ -153,6 +160,9 @@ const RightSection = () => {
         setConsole([errorMessage]);
         setPreprocessedCodes([]);
         return;
+      } else if (error.code === "CA-400005") {
+        setIsInputError(true);
+        alert("입력된 input의 갯수가 적습니다.");
       } else if (error.code == "CA-400007") {
         alert("코드의 실행 횟수가 너무 많습니다.");
 
