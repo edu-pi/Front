@@ -42,7 +42,7 @@ function App() {
     initializeMSW();
   }, [setIsMswReady]);
 
-  if (import.meta.env.VITE_APP_NODE_ENV === "production") {
+  if (import.meta.env.VITE_APP_NODE_PRODUCTION === "production") {
     // Disable all console methods
     console = {
       ...console,
