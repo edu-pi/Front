@@ -76,11 +76,15 @@ interface ApiError {
 // 성공 응답 타입 정의
 interface SuccessResponse {
   result: {
-    code: any[]; // TypeDto는 별도로 정의되어 있다고 가정
+    code: any[];
+    setTutorialPosition: React.Dispatch<React.SetStateAction<{ top: number; left: number }>>;
   };
 }
-
-const RightSection = () => {
+interface props {
+  onboardingStep: boolean[];
+  setTutorialPosition: React.Dispatch<React.SetStateAction<{ top: number; left: number }>>;
+}
+const RightSection = ({ onboardingStep, setTutorialPosition }: props) => {
   const { openAlert, CustomAlert } = useCustomAlert();
   const location = useLocation();
   const [codeFlowList, setCodeFlowList] = useState<State[]>([
@@ -134,7 +138,10 @@ const RightSection = () => {
   const incrementStepIdx = useConsoleStore((state) => state.incrementStepIdx);
   const decrementStepIdx = useConsoleStore((state) => state.decrementStepIdx);
   const [selectedValue, setSelectedValue] = useState("1x");
-
+  const visualizeButtonRef = useRef<HTMLDivElement | null>(null);
+  const ResultButtonRef = useRef<HTMLDivElement | null>(null);
+  const visualizeController = useRef<HTMLDivElement | null>(null);
+  const speedButton = useRef<HTMLDivElement | null>(null);
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedValue(event.target.value);
   };
@@ -143,6 +150,55 @@ const RightSection = () => {
       setStepIdx(0);
     };
   }, [setStepIdx, location]);
+  const calculatePosition = () => {
+    if (visualizeButtonRef && visualizeButtonRef.current) {
+      const rect = visualizeButtonRef.current.getBoundingClientRect();
+      if (onboardingStep[1])
+        setTutorialPosition({
+          top: rect.top + 50,
+          left: rect.left - 400,
+        });
+    }
+    if (ResultButtonRef && ResultButtonRef.current) {
+      const rect = ResultButtonRef.current.getBoundingClientRect();
+      if (onboardingStep[2])
+        setTutorialPosition({
+          top: rect.top + 50,
+          left: rect.left - 400,
+        });
+    }
+    if (visualizeController && visualizeController.current) {
+      const rect = visualizeController.current.getBoundingClientRect();
+      if (onboardingStep[3])
+        setTutorialPosition({
+          top: rect.top + 50,
+          left: rect.left - 385,
+        });
+    }
+    if (speedButton && speedButton.current) {
+      const rect = speedButton.current.getBoundingClientRect();
+      if (onboardingStep[4])
+        setTutorialPosition({
+          top: rect.top + 50,
+          left: rect.left - 290,
+        });
+    }
+  };
+  useEffect(() => {
+    // 초기 위치 설정
+    calculatePosition();
+
+    // 브라우저 크기 변경 이벤트 처리
+    const handleResize = () => {
+      calculatePosition();
+    };
+
+    window.addEventListener("resize", handleResize);
+    // 클린업 함수: 이벤트 리스너 제거
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [onboardingStep]);
 
   const codeVizMutation = useMutation<SuccessResponse, ApiError, Parameters<typeof visualize>[0]>({
     mutationFn: visualize,
@@ -690,52 +746,72 @@ const RightSection = () => {
           <p className={styles["view-section-title"]}>시각화</p>
           <div className={styles["play-wrap"]}>
             <form onSubmit={handleSubmit}>
-              <button
-                type="submit"
-                className={`${styles["view-btn"]} ${codeVizMutation.isPending ? styles["view-btn-loading"] : ""}`}
-                disabled={codeVizMutation.isPending} // 로딩 중에는 버튼 비활성화
+              <div
+                ref={visualizeButtonRef}
+                className={`tutorial-button ${onboardingStep[1] ? "active" : ""}`}
+                style={{ position: "relative" }}
               >
-                <img src="/image/icon_play_w.svg" alt="" />
-                시각화
-              </button>
+                <button
+                  type="submit"
+                  className={`${styles["view-btn"]} ${codeVizMutation.isPending ? styles["view-btn-loading"] : ""}`}
+                  disabled={codeVizMutation.isPending} // 로딩 중에는 버튼 비활성화
+                >
+                  <img src="/image/icon_play_w.svg" alt="" />
+                  시각화
+                </button>
+              </div>
             </form>
             <div className="flex items-center gap-4">
-              <button
-                type="button"
-                className={`${styles["playcode-btn"]} ${
-                  codeExecMutation.isPending ? styles["playcode-btn-loading"] : ""
-                }`}
-                onClick={handleRunCode}
-                disabled={codeExecMutation.isPending} // 로딩 중에는 버튼 비활성화
+              <div
+                ref={ResultButtonRef}
+                className={`tutorial-button ${onboardingStep[2] ? "active" : ""}`}
+                style={{ position: "relative" }}
               >
-                <img src="/image/icon_play_w.svg" alt="" />
-                결과보기
-              </button>
+                <button
+                  type="button"
+                  className={`${styles["playcode-btn"]} ${
+                    codeExecMutation.isPending ? styles["playcode-btn-loading"] : ""
+                  }`}
+                  onClick={handleRunCode}
+                  disabled={codeExecMutation.isPending} // 로딩 중에는 버튼 비활성화
+                >
+                  <img src="/image/icon_play_w.svg" alt="" />
+                  결과보기
+                </button>
+              </div>
             </div>
             <div>
-              <button>
-                <img src="/image/icon_play_back.svg" onClick={onBack} alt="뒤로" />
-              </button>
-              <button className="ml8">
-                {isPlaying ? (
-                  <img src="/image/icon_play_stop.svg" onClick={onPlay} alt="일시정지" />
-                ) : (
-                  <img src="/image/icon_play.svg" onClick={onPlay} alt="재생" />
-                )}
-              </button>
-              <button className="ml8" onClick={onForward}>
-                <img src="/image/icon_play_next.svg" alt="다음" />
-              </button>
+              <div
+                ref={visualizeController}
+                className={`controller tutorial-button ${onboardingStep[3] ? "active" : ""} `}
+              >
+                <button>
+                  <img src="/image/icon_play_back.svg" onClick={onBack} alt="뒤로" />
+                </button>
+                <button className="ml8">
+                  {isPlaying ? (
+                    <img src="/image/icon_play_stop.svg" onClick={onPlay} alt="일시정지" />
+                  ) : (
+                    <img src="/image/icon_play.svg" onClick={onPlay} alt="재생" />
+                  )}
+                </button>
+
+                <button className="ml8" onClick={onForward}>
+                  <img src="/image/icon_play_next.svg" alt="다음" />
+                </button>
+              </div>
               <p className="ml14 fz14">
                 ({consoleIdx}/{codeFlowLength - 1 == -1 ? 0 : codeFlowLength - 1})
               </p>
-              <p className="ml24 fz14">Play Speed</p>
-              <select name="" id="" className="s__select ml14" value={selectedValue} onChange={handleChange}>
-                <option value="0.5x">0.5X</option>
-                <option value="1x">1X</option>
-                <option value="2x">2X</option>
-                <option value="3x">3X</option>
-              </select>
+              <div ref={speedButton} className={`controller tutorial-button ${onboardingStep[4] ? "active" : ""} `}>
+                <p className="ml24 fz14">Play Speed</p>
+                <select name="" id="" className="s__select ml14" value={selectedValue} onChange={handleChange}>
+                  <option value="0.5x">0.5X</option>
+                  <option value="1x">1X</option>
+                  <option value="2x">2X</option>
+                  <option value="3x">3X</option>
+                </select>
+              </div>
             </div>
           </div>
         </div>

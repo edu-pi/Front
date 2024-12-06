@@ -8,7 +8,11 @@ import { useConsoleStore } from "@/store/console";
 import { useGptTooltipStore } from "@/store/gptTooltip";
 import { useTimeoutStore } from "@/store/timeout";
 import { useResetEditor } from "@/store/resetEditor";
-const CodeEditor = () => {
+interface props {
+  onboardingStep: boolean[];
+  setTutorialPosition: React.Dispatch<React.SetStateAction<{ top: number; left: number }>>;
+}
+const CodeEditor = ({ onboardingStep, setTutorialPosition }: props) => {
   const context = useContext(CodeContext);
   const decorationsCollectionRef = useRef<monaco.editor.IEditorDecorationsCollection | null>(null);
 
@@ -30,6 +34,33 @@ const CodeEditor = () => {
   const { gptPin, setGptPin } = useGptTooltipStore();
   const { resetTrigger } = useResetEditor();
   const timeoutRef = useRef<number | null>(null);
+  const codeEditorRef = useRef<HTMLDivElement | null>(null);
+  const calculatePosition = () => {
+    if (codeEditorRef && codeEditorRef.current) {
+      const rect = codeEditorRef.current.getBoundingClientRect();
+      if (onboardingStep[0]) {
+        setTutorialPosition({
+          top: rect.top,
+          left: rect.right + 50,
+        });
+      }
+    }
+  };
+  useEffect(() => {
+    // 초기 위치 설정
+    calculatePosition();
+
+    // 브라우저 크기 변경 이벤트 처리
+    const handleResize = () => {
+      calculatePosition();
+    };
+
+    window.addEventListener("resize", handleResize);
+    // 클린업 함수: 이벤트 리스너 제거
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [onboardingStep]);
 
   // 컴포넌트가 언마운트될 때 timeout 정리
   useEffect(() => {
@@ -248,7 +279,11 @@ const CodeEditor = () => {
 
   return (
     <Fragment>
-      <div style={{ width: "100%", height: "100%", overflow: "hidden" }}>
+      <div
+        ref={codeEditorRef}
+        style={{ width: "100%", height: "100%", overflow: "hidden" }}
+        className={`tutorial-button ${onboardingStep[0] ? "active" : ""}`}
+      >
         <Editor
           defaultLanguage="python"
           value={code}

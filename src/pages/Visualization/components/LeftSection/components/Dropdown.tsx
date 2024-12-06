@@ -2,8 +2,17 @@ import styles from "../LeftSection.module.css";
 import { useEffect, useRef, useState, useContext } from "react";
 import { CodeContext } from "@/pages/Visualization/context/CodeContext";
 import { useConsoleStore } from "@/store/console";
-import { data_codes, string_codes, operation_codes, control_codes, list_codes, repeat_codes, function_codes } from "./exampleCode.ts";
+import {
+  data_codes,
+  string_codes,
+  operation_codes,
+  control_codes,
+  list_codes,
+  repeat_codes,
+  function_codes,
+} from "./exampleCode.ts";
 import { PreprocessedCodesContext } from "@/pages/Visualization/context/PreProcessedCodesContext.ts";
+
 const Dropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState("커리큘럼");
@@ -31,7 +40,7 @@ const Dropdown = () => {
     setIsOpen((prev) => !prev);
   };
   const { resetInputData, resetConsole } = useConsoleStore();
-  const { setPreprocessedCodes } =  useContext(PreprocessedCodesContext);
+  const { setPreprocessedCodes } = useContext(PreprocessedCodesContext);
 
   const updateOption = (optionText: string, code: string, event: React.MouseEvent) => {
     event.stopPropagation();
@@ -46,9 +55,7 @@ const Dropdown = () => {
   return (
     <div className={styles["select-box"]} ref={dropdownRef}>
       <div
-        className={`${styles["default-option"]} ${
-          selectedOption !== "커리큘럼" ? styles["is_selected"] : ""
-        }`}
+        className={`${styles["default-option"]} ${selectedOption !== "커리큘럼" ? styles["is_selected"] : ""}`}
         onClick={toggleDropdown}
       >
         <button id="selected-option">{selectedOption}</button>
