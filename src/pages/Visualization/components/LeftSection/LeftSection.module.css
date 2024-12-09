@@ -169,7 +169,7 @@
   border-radius: 4px;
   border: 1px solid var(--gray01, #dddee4);
   background: var(--white, #fff);
-  z-index: 10;
+  z-index: 9999;
   display: none;
 }
 
