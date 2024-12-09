@@ -54,7 +54,7 @@ const LoggedInHeader = () => {
         <Link className={styles["header-logo"]} to="/">
           <img src="/image/img_logo.png" alt="로고" />
         </Link>
-        {userData && userData?.code !== "CM-200000" ? (
+        {(userData && userData?.code !== "CM-200000") || userData?.code === undefined ? (
           <></>
         ) : (
           <>
