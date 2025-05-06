@@ -11,7 +11,6 @@ import styles from "./RightSection.module.css";
 import Arrow from "./components/Arrow/Arrow";
 
 // 타입 정의
-
 import { ActivateItem } from "@/pages/Visualization/types/activateItem";
 import { VariablesDto, VariableExprArray } from "@/pages/Visualization/types/dto/variablesDto";
 import { ForDto } from "@/pages/Visualization/types/dto/forDto";
@@ -250,6 +249,7 @@ const RightSection = ({ onboardingStep, setTutorialPosition }: props) => {
   });
 
   const { code } = codeContext;
+
   const codeExecMutation = useMutation({
     mutationFn: runCode,
     async onSuccess(data) {
@@ -410,6 +410,7 @@ const RightSection = ({ onboardingStep, setTutorialPosition }: props) => {
     }
 
     for (let preprocessedCode of preprocessedCodes) {
+      console.log(preprocessedCode);
       let changedCodeFlows: any[] = [];
       if (preprocessedCode.type.toLowerCase() === "whiledefine") {
         continue;
