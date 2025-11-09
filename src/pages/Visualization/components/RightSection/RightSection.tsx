@@ -13,6 +13,7 @@ import { useCodeVisualizationMutation } from "./hooks/useCodeVisualizationMutati
 import { useCodeExecutionMutation } from "./hooks/useCodeExecutionMutation";
 import { usePreprocessedCodesProcessor } from "./hooks/usePreprocessedCodesProcessor";
 import { useResizeObserver } from "./hooks/useResizeObserver";
+import { useTutorialPosition } from "./hooks/useTutorialPosition";
 import { useScrollHandlers } from "./hooks/useScrollHandlers";
 import { useConsoleStore, useCodeFlowLengthStore } from "@/store/console";
 import { useRightSectionStore } from "@/store/arrow";
