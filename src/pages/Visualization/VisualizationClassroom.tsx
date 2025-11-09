@@ -121,6 +121,14 @@ const VisualizationClassroom = () => {
     }
   };
 
+  const closeTutorial = () => {
+    setCookie("firstVisit", "true", {
+      path: "/",
+      maxAge: 7 * 24 * 60 * 60, // 7일(초 단위)
+    });
+    setIsTutorialVisible(false);
+  };
+
   // zustand store
   const { focus } = useEditorStore();
   const isGptToggle = useGptTooltipStore((state) => state.isGptToggle);
@@ -210,6 +218,9 @@ const VisualizationClassroom = () => {
                       left: `${tutorialPosition.left}px`,
                     }}
                   >
+                    <button className="tutorial-close-button" onClick={closeTutorial}>
+                      ×
+                    </button>
                     <div className="tutorial-content">
                       <h2>{steps[currentStep].title}</h2>
                       <p>{steps[currentStep].description}</p>
