@@ -32,9 +32,15 @@ function App() {
   useEffect(() => {
     async function initializeMSW() {
       if (typeof window !== "undefined") {
-        if (import.meta.env.VITE_APP_NODE_ENV === "development") {
+        // 환경변수에 따라 MSW 활성화 여부 결정
+        const shouldUseMSW = import.meta.env.VITE_APP_USE_MSW === "true";
+        
+        if (shouldUseMSW) {
           await setupMSW();
+        } else {
+          console.log("MSW disabled - Using real API server");
         }
+        
         setIsMswReady(true);
       }
     }
