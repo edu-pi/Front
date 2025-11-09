@@ -11,8 +11,7 @@ import styles from "./RightSection.module.css";
 import Arrow from "./components/Arrow/Arrow";
 import { useCodeVisualizationMutation } from "./hooks/useCodeVisualizationMutation";
 import { useCodeExecutionMutation } from "./hooks/useCodeExecutionMutation";
-
-//zustand store
+import { usePreprocessedCodesProcessor } from "./hooks/usePreprocessedCodesProcessor";
 import { useConsoleStore, useCodeFlowLengthStore } from "@/store/console";
 import { useRightSectionStore } from "@/store/arrow";
 import { useEditorStore } from "@/store/editor";
