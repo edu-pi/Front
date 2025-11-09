@@ -11,6 +11,7 @@ import styles from "./RightSection.module.css";
 import Arrow from "./components/Arrow/Arrow";
 import { useCodeVisualizationMutation } from "./hooks/useCodeVisualizationMutation";
 import { useCodeExecutionMutation } from "./hooks/useCodeExecutionMutation";
+import { useVisualizationPlayer } from "./hooks/useVisualizationPlayer";
 import { usePreprocessedCodesProcessor } from "./hooks/usePreprocessedCodesProcessor";
 import { useResizeObserver } from "./hooks/useResizeObserver";
 import { useTutorialPosition } from "./hooks/useTutorialPosition";
