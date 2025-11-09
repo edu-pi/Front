@@ -9,6 +9,7 @@ import ResizeObserver from "resize-observer-polyfill";
 import styles from "./RightSection.module.css";
 // components
 import Arrow from "./components/Arrow/Arrow";
+import { useCodeVisualizationMutation } from "./hooks/useCodeVisualizationMutation";
 import { useCodeExecutionMutation } from "./hooks/useCodeExecutionMutation";
 
 //zustand store
@@ -104,6 +105,7 @@ const RightSection = ({ onboardingStep, setTutorialPosition }: props) => {
   const ResultButtonRef = useRef<HTMLDivElement | null>(null);
   const visualizeController = useRef<HTMLDivElement | null>(null);
   const speedButton = useRef<HTMLDivElement | null>(null);
+  const codeVizMutation = useCodeVisualizationMutation({ setIsPlaying });
   const codeExecMutation = useCodeExecutionMutation();
   useEffect(() => {
     return () => {
