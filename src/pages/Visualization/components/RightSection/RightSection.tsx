@@ -9,44 +9,7 @@ import ResizeObserver from "resize-observer-polyfill";
 import styles from "./RightSection.module.css";
 // components
 import Arrow from "./components/Arrow/Arrow";
-
-// 타입 정의
-import { ActivateItem } from "@/pages/Visualization/types/activateItem";
-import { VariablesDto, VariableExprArray } from "@/pages/Visualization/types/dto/variablesDto";
-import { ForDto } from "@/pages/Visualization/types/dto/forDto";
-import { PrintDto } from "@/pages/Visualization/types/dto/printDto";
-import { IfElseDto } from "@/pages/Visualization/types/dto/ifElseDto";
-import { CodeFlowVariableDto } from "@/pages/Visualization/types/dto/codeFlowVariableDto";
-import { PrintItem } from "@/pages/Visualization/types/codeFlow/printItem";
-import { InputItem } from "@/pages/Visualization/types/codeFlow/inputItem";
-import { WhileDto } from "@/pages/Visualization/types/dto/whileDto";
-import { AllDataStructureItem } from "@/pages/Visualization/types/dataStructuresItem/allDataStructureItem";
-import { WrapperDataStructureItem } from "@/pages/Visualization/types/dataStructuresItem/wrapperDataStructureItem";
-import { CreateCallStackDto } from "@/pages/Visualization/types/dto/createCallStackDto";
-import { EndUserFuncDto } from "@/pages/Visualization/types/dto/endUserFuncDto";
-import { usedNameObjectType } from "../../types/dataStructuresItem/usedNameObjectType";
-import { DataStructureVarsItem } from "@/pages/Visualization/types/dataStructuresItem/dataStructureVarsItem";
-import { isValidTypeDtoArray } from "@/pages/Visualization/types/dto/ValidTypeDto";
-// services폴더에서 가져온 함수
-import { addCodeFlow } from "./services/addCodeFlow";
-import { insertIntoDepth } from "./services/insertIntoDepth";
-import { insertEqualToDepth } from "./services/insertEqualToDepth";
-import { updateCodeFlow } from "./services/updateCodeFlow";
-import { LightCodeFlow } from "./services/LightCodeFlow";
-import { createObjectToAdd } from "./services/createObjectToAdd";
-import { updateDataStructure } from "./services/updateDataStructure";
-import { updateActivate } from "./services/updateActivate";
-import { turnOffAllNodeLight } from "./services/turnOffAllNodeLight";
-import { findTargetChild } from "./services/findTargetChild";
-import { findDeleteUsedId } from "./services/findDeleteUsedId";
-import { unLightCodeFlow } from "./services/unLightCodeFlow";
-import { isNotServiceDtoType } from "./services/isNotServiceDtoType";
-//rendUtils에서 가져온 함수
-import { renderingStructure } from "./renderingStructure";
-import { renderingCodeFlow } from "./renderingCodeFlow";
-import { IfElseChangeDto } from "@/pages/Visualization/types/dto/ifElseChangeDto";
-import { refreshCodeFlow } from "./services/refreshCodeFlow";
-import { deleteCodeFlow } from "./services/deleteCodeFlow";
+import { useCodeExecutionMutation } from "./hooks/useCodeExecutionMutation";
 
 //zustand store
 import { useConsoleStore, useCodeFlowLengthStore } from "@/store/console";
@@ -141,9 +104,7 @@ const RightSection = ({ onboardingStep, setTutorialPosition }: props) => {
   const ResultButtonRef = useRef<HTMLDivElement | null>(null);
   const visualizeController = useRef<HTMLDivElement | null>(null);
   const speedButton = useRef<HTMLDivElement | null>(null);
-  const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedValue(event.target.value);
-  };
+  const codeExecMutation = useCodeExecutionMutation();
   useEffect(() => {
     return () => {
       setStepIdx(0);
