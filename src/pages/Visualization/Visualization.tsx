@@ -99,6 +99,14 @@ export default function Visualization() {
       setOnboardingStep(newOnboardingStep);
     }
   };
+
+  const closeTutorial = () => {
+    setCookie("firstVisit", "true", {
+      path: "/",
+      maxAge: 7 * 24 * 60 * 60, // 7일(초 단위)
+    });
+    setIsTutorialVisible(false);
+  };
   // zustand store
   const { resetInputData } = useConsoleStore();
   useEffect(() => {
@@ -154,6 +162,9 @@ export default function Visualization() {
                       left: `${tutorialPosition.left}px`,
                     }}
                   >
+                    <button className="tutorial-close-button" onClick={closeTutorial}>
+                      ×
+                    </button>
                     <div className="tutorial-content">
                       <h2>{steps[currentStep].title}</h2>
                       <p>{steps[currentStep].description}</p>
