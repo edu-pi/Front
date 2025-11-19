@@ -116,38 +116,45 @@ const Classroom = () => {
   };
 
   const useSSE = (url: string) => {
-    const [data, setData] = useState(null);
+    const [data, setData] = useState<unknown>(null);
     const queryClient = useQueryClient();
 
     const subscribe = useCallback(() => {
       const eventSource = new EventSource(url, { withCredentials: true });
 
       eventSource.onmessage = (event) => {
-        const newData = JSON.parse(event.data);
-        setData(newData);
-        // setQueryData로 값 캐싱
-        queryClient.setQueryData(["sse-data"], newData);
-        guestDataRefetch();
-        classroomDataRefetch();
+        try {
+          const newData = JSON.parse(event.data);
+          setData(newData);
+          queryClient.setQueryData(["sse-data"], newData);
+          guestDataRefetch();
+          classroomDataRefetch();
+        } catch (error) {
+          console.error("Failed to parse SSE message:", error);
+        }
       };
-      eventSource.addEventListener("action", (event) => {
-        const newData = JSON.parse(event.data);
-        setData(newData);
-        // setQueryData로 값 캐싱
-        queryClient.setQueryData(["sse-data", classroomId], newData);
 
-        guestDataRefetch();
-        classroomDataRefetch();
+      eventSource.addEventListener("action", (event) => {
+        try {
+          const newData = JSON.parse(event.data);
+          setData(newData);
+          queryClient.setQueryData(["sse-data", classroomId], newData);
+          guestDataRefetch();
+          classroomDataRefetch();
+        } catch (error) {
+          console.error("Failed to parse SSE action event:", error);
+        }
       });
-      // connection되면
-      eventSource.addEventListener("open", function () {});
+
+      eventSource.addEventListener("error", (error) => {
+        console.error("SSE connection error:", error);
+      });
 
       return () => {
         eventSource.close();
       };
-    }, [url, queryClient]);
+    }, [url, queryClient, classroomId, guestDataRefetch, classroomDataRefetch]);
 
-    // 요청을 끊을 때 일어나는 useEffect
     useEffect(() => {
       const unsubscribe = subscribe();
       return unsubscribe;

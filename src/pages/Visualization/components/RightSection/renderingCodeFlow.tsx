@@ -30,8 +30,10 @@ import { InputItem } from "@/pages/Visualization/types/codeFlow/inputItem";
 import { useArrowStore } from "@/store/arrow";
 import { FlowControlItem } from "@/pages/Visualization/types/codeFlow/flowControlItem.ts";
 
+import { CodeFlowItem } from "./types";
+
 interface Props {
-  codeFlow: any;
+  codeFlow: CodeFlowItem;
   children?: ReactNode;
   width: number;
   height: number;
@@ -59,7 +61,7 @@ const CodeFlowItem = ({ codeFlow, width, height, up, right, children, codeFlowSc
 };
 
 export const renderingCodeFlow = (
-  codeFlows: any[],
+  codeFlows: CodeFlowItem[],
   width: number,
   height: number,
   codeFlowScrollTop: number

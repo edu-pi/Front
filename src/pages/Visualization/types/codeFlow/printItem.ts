@@ -1,3 +1,5 @@
+import { CodeFlowItem } from "@/pages/Visualization/components/RightSection/types";
+
 export interface PrintItem {
   id: number;
   type: string;
@@ -6,5 +8,5 @@ export interface PrintItem {
   expr: string;
   console: string;
   highlights: number[];
-  child: any[];
+  child: CodeFlowItem[];
 }

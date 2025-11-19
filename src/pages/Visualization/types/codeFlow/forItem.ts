@@ -1,3 +1,5 @@
+import { CodeFlowItem } from "@/pages/Visualization/components/RightSection/types";
+
 export interface ForItem {
   id: number;
   start: string;
@@ -12,5 +14,5 @@ export interface ForItem {
   type: string;
   depth: number;
   isLight: boolean;
-  child: any[];
+  child: CodeFlowItem[];
 }

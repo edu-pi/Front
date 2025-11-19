@@ -1,6 +1,7 @@
 import { http, HttpResponse, delay } from "msw";
 import * as jose from "jose";
-import testResponseBody from "./samples/testResponseBody";
+// import testResponseBody from "./samples/testResponseBody";
+import forLoopResponseBody from "./samples/forLoopResponseBody";
 
 const JWT_SECRET = new TextEncoder().encode("your_jwt_secret_key");
 
@@ -27,20 +28,35 @@ interface SignupUser {
 }
 
 export const handlers = [
-  // //시각화 요청 성공
-  http.post("http://localhost:8080/edupi-assist/v1/execute/visualize", () => {
+  http.post("*/edupi-assist/v1/execute/visualize", () => {
     return HttpResponse.json(
       {
-        success: true,
-        code: "CS-200000",
+        code: "CA-200000",
         detail: "success code analysis",
-        result: { code: testResponseBody },
+        result: {
+          code: forLoopResponseBody,
+        },
       },
       {
         status: 200,
       }
     );
   }),
+
+  // 기존 테스트 응답 (주석 처리 - 필요시 활성화)
+  // http.post("http://localhost:8080/edupi-assist/v1/execute/visualize", () => {
+  //   return HttpResponse.json(
+  //     {
+  //       success: true,
+  //       code: "CS-200000",
+  //       detail: "success code analysis",
+  //       result: { code: testResponseBody },
+  //     },
+  //     {
+  //       status: 200,
+  //     }
+  //   );
+  // }),
 
   // 시각화 요청 실패
   // http.post("http://localhost:8080/edupi-assist/v1/execute/visualize", async () => {

@@ -20,7 +20,7 @@ import { useEditorStore } from "@/store/editor";
 import { useGptTooltipStore } from "@/store/gptTooltip";
 
 export default function Visualization() {
-  const [code, setCode] = useState<any>(
+  const [code, setCode] = useState<string>(
     [
       "for i in range(2, 10):\n" +
         "   for j in range(1, 10):\n" +
@@ -99,6 +99,14 @@ export default function Visualization() {
       setOnboardingStep(newOnboardingStep);
     }
   };
+
+  const closeTutorial = () => {
+    setCookie("firstVisit", "true", {
+      path: "/",
+      maxAge: 7 * 24 * 60 * 60, // 7일(초 단위)
+    });
+    setIsTutorialVisible(false);
+  };
   // zustand store
   const { resetInputData } = useConsoleStore();
   useEffect(() => {
@@ -154,6 +162,9 @@ export default function Visualization() {
                       left: `${tutorialPosition.left}px`,
                     }}
                   >
+                    <button className="tutorial-close-button" onClick={closeTutorial}>
+                      ×
+                    </button>
                     <div className="tutorial-content">
                       <h2>{steps[currentStep].title}</h2>
                       <p>{steps[currentStep].description}</p>

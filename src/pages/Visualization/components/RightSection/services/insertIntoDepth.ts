@@ -1,11 +1,18 @@
-export const insertIntoDepth = (codeFlows: any[], toAddObject: any, prevTrackingId: number): any[] => {
+import { CodeFlowItem } from "../types";
+
+export const insertIntoDepth = (
+  codeFlows: CodeFlowItem[],
+  toAddObject: CodeFlowItem,
+  prevTrackingId: number
+): CodeFlowItem[] => {
   return codeFlows.map((codeFlow) => {
     if (codeFlow.id === prevTrackingId) {
       return {
         ...codeFlow,
-        child: [toAddObject, ...codeFlow.child],
+        child: [toAddObject, ...(codeFlow.child || [])],
       };
-    } else if (codeFlow.child && codeFlow.child.length > 0) {
+    }
+    if (codeFlow.child && codeFlow.child.length > 0) {
       return {
         ...codeFlow,
         child: insertIntoDepth(codeFlow.child, toAddObject, prevTrackingId),

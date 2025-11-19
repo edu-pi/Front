@@ -1,4 +1,3 @@
-// src/store/gptMutation.ts (또는 프로젝트의 store 디렉토리 경로에 맞게 조정)
 import { create } from "zustand";
 
 interface GptMutationState {

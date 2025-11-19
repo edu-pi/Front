@@ -1929,6 +1929,29 @@ gpt-icon-small {
   z-index: 9999;
 }
 
+.tutorial-close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 28px;
+  color: #666;
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  line-height: 1;
+  transition: color 0.2s;
+}
+
+.tutorial-close-button:hover {
+  color: #333;
+}
+
 .tutorial-content h2 {
   margin-bottom: 15px;
   color: #333;
