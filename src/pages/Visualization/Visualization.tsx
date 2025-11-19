@@ -20,7 +20,7 @@ import { useEditorStore } from "@/store/editor";
 import { useGptTooltipStore } from "@/store/gptTooltip";
 
 export default function Visualization() {
-  const [code, setCode] = useState<any>(
+  const [code, setCode] = useState<string>(
     [
       "for i in range(2, 10):\n" +
         "   for j in range(1, 10):\n" +

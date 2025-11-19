@@ -1,8 +1,15 @@
-export const insertEqualToDepth = (codeFlows: any[], toAddObject: any, prevTrackingId: number): any[] => {
+import { CodeFlowItem } from "../types";
+
+export const insertEqualToDepth = (
+  codeFlows: CodeFlowItem[],
+  toAddObject: CodeFlowItem,
+  prevTrackingId: number
+): CodeFlowItem[] => {
   return codeFlows.flatMap((codeFlow) => {
     if (codeFlow.id === prevTrackingId) {
       return [codeFlow, toAddObject];
-    } else if (codeFlow.child && codeFlow.child.length > 0) {
+    }
+    if (codeFlow.child && codeFlow.child.length > 0) {
       return {
         ...codeFlow,
         child: insertEqualToDepth(codeFlow.child, toAddObject, prevTrackingId),

@@ -1,14 +1,14 @@
-export const isNotServiceDto = (item: any): boolean => {
-  const result = ["pop", "remove", "insert", "extend", "dict"].includes(item?.type);
-  return result;
+interface ServiceDtoItem {
+  type?: string;
+}
+
+export const isNotServiceDto = (item: ServiceDtoItem | null | undefined): boolean => {
+  if (!item?.type) {
+    return false;
+  }
+  return ["pop", "remove", "insert", "extend", "dict"].includes(item.type);
 };
 
-export const isNotServiceDtoType = (data: any): boolean => {
-  for (let item of data) {
-    const isValid = isNotServiceDto(item);
-    if (isValid) {
-      return true;
-    }
-  }
-  return false;
+export const isNotServiceDtoType = (data: ServiceDtoItem[]): boolean => {
+  return data.some((item) => isNotServiceDto(item));
 };

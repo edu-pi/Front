@@ -226,15 +226,20 @@ export const getTotalActionInfo = async (classroomId: number) => {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     const data = await response.json();
-    let ing = data.result.totalActionInfo.find((item: any) => item.name === "ING")?.count;
+    interface ActionInfoItem {
+      name: string;
+      count: number;
+    }
+    const actionInfo = data.result.totalActionInfo as ActionInfoItem[];
+    let ing = actionInfo.find((item) => item.name === "ING")?.count;
     if (!ing) {
       ing = 0;
     }
-    let complete = data.result.totalActionInfo.find((item: any) => item.name === "COMPLETE")?.count;
+    let complete = actionInfo.find((item) => item.name === "COMPLETE")?.count;
     if (!complete) {
       complete = 0;
     }
-    let help = data.result.totalActionInfo.find((item: any) => item.name === "HELP")?.count;
+    let help = actionInfo.find((item) => item.name === "HELP")?.count;
     if (!help) {
       help = 0;
     }
@@ -278,7 +283,13 @@ export const ClassEnd = async (classroomId: number) => {
   return data;
 };
 
-export const fetchGuestActionRequest = async (req: any) => {
+interface FetchGuestActionRequestParams {
+  classroomId: number;
+  action: string;
+  code: string;
+}
+
+export const fetchGuestActionRequest = async (req: FetchGuestActionRequestParams) => {
   try {
     const response = await fetch(`${BASE_URL}/edupi-lms/v1/progress/send`, {
       method: "POST",

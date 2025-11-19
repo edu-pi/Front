@@ -10,6 +10,7 @@ import { useContext } from "react";
 import { isNotServiceDtoType } from "../services/isNotServiceDtoType";
 import { isValidTypeDtoArray } from "@/pages/Visualization/types/dto/ValidTypeDto";
 import { SuccessResponse, ApiError } from "../types";
+import { handleVisualizationError } from "../utils/errorHandler";
 
 interface UseCodeVisualizationMutationProps {
   setIsPlaying: (value: boolean) => void;
@@ -38,9 +39,7 @@ export const useCodeVisualizationMutation = ({ setIsPlaying }: UseCodeVisualizat
   return useMutation<SuccessResponse, ApiError, Parameters<typeof visualize>[0]>({
     mutationFn: visualize,
     async onSuccess(data) {
-      // 타입 체크 함수
       if (isNotServiceDtoType(data.result.code)) {
-        console.error("시각화를 지원하지 않는 코드가 포함되어 있습니다.");
         throw new Error("시각화를 지원하지 않는 코드가 포함되어 있습니다.");
       }
       if (isValidTypeDtoArray(data.result.code)) {
@@ -49,39 +48,18 @@ export const useCodeVisualizationMutation = ({ setIsPlaying }: UseCodeVisualizat
         setDisplayNone(false);
         setIsPlaying(true);
       } else {
-        console.error("데이터 형식이 올바르지 않습니다");
         throw new Error("데이터 형식이 올바르지 않습니다");
       }
     },
     onError(error) {
-      console.error(error);
-
-      if (error.message === "데이터 형식이 올바르지 않습니다") {
-        return;
-      } else if (error.code === "CA-400006" || error.code === "CA-400999") {
-        openAlert("지원하지 않는 코드가 포함되어 있습니다.");
-        return;
-      } else if (error.code === "CA-400005") {
-        setIsInputError(true);
-        openAlert("입력된 input의 개수가 적습니다.");
-      } else if (error.message === "시각화를 지원하지 않는 코드가 포함되어 있습니다.") {
-        openAlert("시각화를 지원하지 않는 코드가 포함되어 있습니다.");
-        return;
-      } else if (error.code === "CA-400002") {
-        const linNumber = Number(error.result.lineNumber);
-        const errorMessage = error.result.errorMessage;
-        if (errorMessage) {
-          setErrorLine({ lineNumber: linNumber, message: errorMessage });
-          setConsoleList([errorMessage]);
-        }
-        setPreprocessedCodes([]);
-        return;
-      } else if (error.code === "CA-400007") {
-        openAlert("코드의 실행 횟수가 너무 많습니다.");
-        return;
-      }
-      setConsoleList([]);
-      setPreprocessedCodes([]);
+      handleVisualizationError({
+        error,
+        openAlert,
+        setPreprocessedCodes,
+        setConsoleList,
+        setErrorLine,
+        setIsInputError,
+      });
     },
   });
 };

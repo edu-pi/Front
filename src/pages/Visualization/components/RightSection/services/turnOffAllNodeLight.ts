@@ -1,9 +1,11 @@
-export const turnOffAllNodeLight = (codeFlows: any[]): any[] => {
+import { CodeFlowItem } from "../types";
+
+export const turnOffAllNodeLight = (codeFlows: CodeFlowItem[]): CodeFlowItem[] => {
   return codeFlows.map((codeFlow) => {
     return {
       ...codeFlow,
       isLight: false,
-      child: turnOffAllNodeLight(codeFlow.child),
+      child: turnOffAllNodeLight(codeFlow.child || []),
     };
   });
 };

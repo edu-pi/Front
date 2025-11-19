@@ -1,3 +1,5 @@
+import { CodeFlowItem } from "@/pages/Visualization/components/RightSection/types";
+
 export interface WhileItem {
   id: number;
   type: string;
@@ -5,5 +7,5 @@ export interface WhileItem {
   highlights: number[];
   depth: number;
   isLight: boolean;
-  child: any[];
+  child: CodeFlowItem[];
 }

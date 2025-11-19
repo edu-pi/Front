@@ -14,7 +14,8 @@ import { ReturnDto } from "@/pages/Visualization/types/dto/returnDto";
 import { FlowControlDto } from "@/pages/Visualization/types/dto/flowControlDto";
 import { EndUserFuncDto } from "@/pages/Visualization/types/dto/endUserFuncDto";
 import { InputDto } from "@/pages/Visualization/types/dto/inputDto";
-// 스택에 넣을 객체를 생성하는 함수
+import { CodeFlowItem } from "../types";
+
 export const createObjectToAdd = (
   preprocessedCode:
     | PrintDataToAdd
@@ -25,8 +26,8 @@ export const createObjectToAdd = (
     | ReturnDto
     | FlowControlDto
     | EndUserFuncDto
-): any => {
-  const baseObject: any = {
+): CodeFlowItem => {
+  const baseObject: Partial<CodeFlowItem> = {
     id: preprocessedCode.id!,
     type: preprocessedCode.type,
     depth: preprocessedCode.depth!,
@@ -53,19 +54,19 @@ export const createObjectToAdd = (
       let isStartLight = false;
       let isEndLight = false;
       let isStepLight = false;
-      preprocessedCode.highlights?.map((highlight: any) => {
-        highlight = highlight.toLowerCase();
+      preprocessedCode.highlights?.forEach((highlight) => {
+        const lowerHighlight = highlight.toLowerCase();
 
-        if (highlight === "cur") {
+        if (lowerHighlight === "cur") {
           isCurLight = true;
         }
-        if (highlight === "start") {
+        if (lowerHighlight === "start") {
           isStartLight = true;
         }
-        if (highlight === "end") {
+        if (lowerHighlight === "end") {
           isEndLight = true;
         }
-        if (highlight === "step") {
+        if (lowerHighlight === "step") {
           isStepLight = true;
         }
       });
@@ -166,4 +167,4 @@ export const createObjectToAdd = (
     default:
       throw new Error(`Unsupported type: ${type}`);
   }
-};
+} as CodeFlowItem;

@@ -104,9 +104,6 @@ export const usePreprocessedCodesProcessor = () => {
     const state = createInitialState();
 
     for (const preprocessedCode of preprocessedCodes) {
-      console.log(preprocessedCode);
-
-      // whiledefine 타입은 건너뛰기
       if (preprocessedCode.type.toLowerCase() === "whiledefine") {
         continue;
       }

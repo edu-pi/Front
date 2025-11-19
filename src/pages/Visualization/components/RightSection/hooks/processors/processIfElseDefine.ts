@@ -1,5 +1,5 @@
 import { IfElseDto } from "@/pages/Visualization/types/dto/ifElseDto";
-import { State } from "../../types";
+import { State, CodeFlowItem } from "../../types";
 import { createObjectToAdd } from "../../services/createObjectToAdd";
 import { turnOffAllNodeLight } from "../../services/turnOffAllNodeLight";
 import { insertIntoDepth } from "../../services/insertIntoDepth";
@@ -45,7 +45,7 @@ export const processIfElseDefine = ({
 
     newUsedId.push(toAddObject.id!);
 
-    let finallyCodeFlow: any;
+    let finallyCodeFlow: CodeFlowItem[];
     if (toAddObject.depth > newTrackingDepth) {
       finallyCodeFlow = insertIntoDepth(newAccCodeFlow.objects, toAddObject, newTrackingId);
     } else if (toAddObject.depth === newTrackingDepth) {

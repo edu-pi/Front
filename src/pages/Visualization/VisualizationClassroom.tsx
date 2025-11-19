@@ -35,7 +35,7 @@ interface ClassAccessRightDataType {
 // 원본 코드 타입 정의
 
 const VisualizationClassroom = () => {
-  const [code, setCode] = useState<any>(
+  const [code, setCode] = useState<string>(
     [
       "for i in range(2, 10):\n" +
         "   for j in range(1, 10):\n" +

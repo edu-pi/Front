@@ -6,7 +6,7 @@ import { WhileDto } from "@/pages/Visualization/types/dto/whileDto";
 import { PrintItem } from "@/pages/Visualization/types/codeFlow/printItem";
 import { InputItem } from "@/pages/Visualization/types/codeFlow/inputItem";
 import { CodeFlowVariableItem } from "@/pages/Visualization/types/codeFlow/codeFlowVariableItem";
-import { State } from "../../types";
+import { State, CodeFlowItem } from "../../types";
 import { createObjectToAdd } from "../../services/createObjectToAdd";
 import { updateCodeFlow } from "../../services/updateCodeFlow";
 import { refreshCodeFlow } from "../../services/refreshCodeFlow";
@@ -73,8 +73,7 @@ export const processCodeFlow = ({
     }
   }
 
-  // CodeFlow 업데이트 또는 추가
-  let changedCodeFlows: any[];
+  let changedCodeFlows: CodeFlowItem[];
   if (newUsedId.includes(toAddObject.id!)) {
     // 기존 항목 업데이트
     if (toAddObject.type === "for" || toAddObject.type === "while") {

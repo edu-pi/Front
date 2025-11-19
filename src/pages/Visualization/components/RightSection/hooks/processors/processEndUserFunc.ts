@@ -1,5 +1,5 @@
 import { EndUserFuncDto } from "@/pages/Visualization/types/dto/endUserFuncDto";
-import { State } from "../../types";
+import { State, CodeFlowItem } from "../../types";
 import { createObjectToAdd } from "../../services/createObjectToAdd";
 import { deleteCodeFlow } from "../../services/deleteCodeFlow";
 import { insertIntoDepth } from "../../services/insertIntoDepth";
@@ -48,7 +48,7 @@ export const processEndUserFunc = ({
   const deletedCodeFlow = deleteCodeFlow(accCodeFlow.objects, preprocessedCode.id);
   let newAccCodeFlow = { objects: deletedCodeFlow };
 
-  let finallyCodeFlow: any;
+  let finallyCodeFlow: CodeFlowItem[];
   if (toAddObject.depth > prevTrackingDepth) {
     finallyCodeFlow = insertIntoDepth(newAccCodeFlow.objects, toAddObject, prevTrackingId);
   } else if (toAddObject.depth === prevTrackingDepth) {

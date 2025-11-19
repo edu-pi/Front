@@ -1,3 +1,5 @@
+import { CodeFlowItem } from "@/pages/Visualization/components/RightSection/types";
+
 export interface CodeFlowVariableItem {
   id: number;
   name: string;
@@ -6,5 +8,5 @@ export interface CodeFlowVariableItem {
   console?: string;
   type: string;
   expr: string;
-  child: [];
+  child: CodeFlowItem[];
 }

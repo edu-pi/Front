@@ -1,15 +1,13 @@
 import { ActivateItem } from "@/pages/Visualization/types/activateItem";
+import { CodeFlowItem } from "../types";
 
-// 현재 불이 켜져야하는 부분을 표시해주는 함수
 export const updateActivate = (
-  oldActivates: ActivateItem[], // 불이 들어와야하는 객체를 저장하는 옛날 리스트
-  newActivate: any // 새로 불이 들어와야하는 곳의 정보를 담고있는 객체
+  oldActivates: ActivateItem[],
+  newActivate: CodeFlowItem
 ): ActivateItem[] => {
-  // 새로 생성되는 활성화리스트를 임시로 받아서 리턴할 변수
-  let tmpActivate: ActivateItem[] = [];
+  const tmpActivate: ActivateItem[] = [];
 
-  // 옛날 활성화 리스트를 돌면서 새로운 활성화 객체의 위치를 찾아서 활성화 시켜준다
-  for (let oldActivate of oldActivates) {
+  for (const oldActivate of oldActivates) {
     if (oldActivate.depth === newActivate.depth) {
       tmpActivate.push({
         id: newActivate.id,
@@ -23,7 +21,7 @@ export const updateActivate = (
 
   tmpActivate.push({
     id: newActivate.id,
-    depth: newActivate.depth!,
+    depth: newActivate.depth,
     type: newActivate.type,
   });
 

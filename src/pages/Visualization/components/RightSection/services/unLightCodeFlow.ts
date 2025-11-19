@@ -1,6 +1,8 @@
-export const unLightCodeFlow = (accCodeFlow: any) => {
-  return accCodeFlow.map((codeFlow: any) => {
-    if (codeFlow.child) {
+import { CodeFlowItem } from "../types";
+
+export const unLightCodeFlow = (accCodeFlow: CodeFlowItem[]): CodeFlowItem[] => {
+  return accCodeFlow.map((codeFlow) => {
+    if (codeFlow.child && codeFlow.child.length > 0) {
       return {
         ...codeFlow,
         isLight: false,

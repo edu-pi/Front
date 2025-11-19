@@ -7,6 +7,7 @@ import { PreprocessedCodesContext } from "../../../context/PreProcessedCodesCont
 import { InputErrorContext } from "@/pages/Visualization/context/InputErrorContext";
 import { useContext } from "react";
 import { ApiError } from "../types";
+import { handleExecutionError } from "../utils/errorHandler";
 
 export const useCodeExecutionMutation = () => {
   const { openAlert } = useCustomAlert();
@@ -35,35 +36,18 @@ export const useCodeExecutionMutation = () => {
       setPreprocessedCodes([]);
       setCodeFlowLength(0);
       setStepIdx(0);
-      setConsoleList([data.result.output]);
+      setConsoleList([data.result.output || ""]);
       setHighlightLines([]);
     },
     onError(error: ApiError) {
-      console.error(error);
-
-      if (error.message === "데이터 형식이 올바르지 않습니다") {
-        return;
-      } else if (error.code === "CA-400006" || error.code === "CA-400999") {
-        openAlert("지원하지 않는 코드가 포함되어 있습니다");
-        return;
-      } else if (error.code === "CA-400005") {
-        setIsInputError(true);
-        openAlert("입력된 input의 갯수가 적습니다.");
-      } else if (error.code === "CA-400002") {
-        // 잘못된 문법 에러처리
-        const linNumber = Number(error.result.lineNumber);
-        const errorMessage = error.result.errorMessage;
-        if (errorMessage) {
-          setErrorLine({ lineNumber: linNumber, message: errorMessage });
-          setConsoleList([errorMessage]);
-        }
-        setPreprocessedCodes([]);
-        return;
-      } else if (error.code === "CA-400007") {
-        openAlert("코드의 실행 횟수가 너무 많습니다.");
-        return;
-      }
-      setConsoleList([]);
+      handleExecutionError({
+        error,
+        openAlert,
+        setPreprocessedCodes,
+        setConsoleList,
+        setErrorLine,
+        setIsInputError,
+      });
     },
   });
 };

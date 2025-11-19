@@ -1,3 +1,5 @@
+import { CodeFlowItem } from "@/pages/Visualization/components/RightSection/types";
+
 export interface CallUserFuncItem {
   id: number;
   type: string;
@@ -6,5 +8,5 @@ export interface CallUserFuncItem {
   assignName: string;
   signature: string;
   highlights: number[];
-  child: any[];
+  child: CodeFlowItem[];
 }

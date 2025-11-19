@@ -1,7 +1,35 @@
-// 타입 정의 파일
+import { ValidTypeDto } from "@/pages/Visualization/types/dto/ValidTypeDto";
+import {
+  ForItem,
+  PrintItem,
+  ConditionItem,
+  CodeFlowVariableItem,
+  CodeFlowListItem,
+  CodeFlowTupleItem,
+  WhileItem,
+  CallUserFuncItem,
+  ReturnItem,
+  InputItem,
+  FlowControlItem,
+  ElseItem,
+} from "@/pages/Visualization/types/codeFlow";
+
+export type CodeFlowItem =
+  | ForItem
+  | PrintItem
+  | ConditionItem
+  | CodeFlowVariableItem
+  | CodeFlowListItem
+  | CodeFlowTupleItem
+  | WhileItem
+  | CallUserFuncItem
+  | ReturnItem
+  | InputItem
+  | FlowControlItem
+  | ElseItem;
 
 export interface State {
-  objects: any[];
+  objects: CodeFlowItem[];
 }
 
 export interface ApiError {
@@ -16,7 +44,7 @@ export interface ApiError {
 
 export interface SuccessResponse {
   result: {
-    code: any[];
+    code: ValidTypeDto[];
     output?: string;
   };
 }

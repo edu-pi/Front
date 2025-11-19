@@ -1,8 +1,10 @@
-export const deleteCodeFlow = (codeFlows: any[], toDeleteId: number): any[] => {
+import { CodeFlowItem } from "../types";
+
+export const deleteCodeFlow = (codeFlows: CodeFlowItem[], toDeleteId: number): CodeFlowItem[] => {
   return codeFlows
     .map((codeFlow) => {
       if (codeFlow.id === toDeleteId) {
-        return false;
+        return null;
       }
       const newCodeFlow = { ...codeFlow };
       if (newCodeFlow.child && newCodeFlow.child.length > 0) {
@@ -10,5 +12,5 @@ export const deleteCodeFlow = (codeFlows: any[], toDeleteId: number): any[] => {
       }
       return newCodeFlow;
     })
-    .filter((codeFlow): codeFlow is any => codeFlow !== false);
+    .filter((codeFlow): codeFlow is CodeFlowItem => codeFlow !== null);
 };
