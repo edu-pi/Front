@@ -14,6 +14,7 @@ import { usePreprocessedCodesProcessor } from "./hooks/usePreprocessedCodesProce
 import { useResizeObserver } from "./hooks/useResizeObserver";
 import { useTutorialPosition } from "./hooks/useTutorialPosition";
 import { useScrollHandlers } from "./hooks/useScrollHandlers";
+import { useArrowPosition } from "./hooks/useArrowPosition";
 
 // 컴포넌트
 import { VisualizationControls } from "./components/VisualizationControls";
@@ -73,6 +74,12 @@ const RightSection = ({ onboardingStep, setTutorialPosition }: RightSectionProps
     },
   });
 
+  useArrowPosition({
+    stepIdx,
+    codeFlowScrollTop,
+    structuresScrollTop,
+  });
+
   // Location 변경 시 stepIdx 초기화
   useEffect(() => {
     return () => {
@@ -124,15 +131,11 @@ const RightSection = ({ onboardingStep, setTutorialPosition }: RightSectionProps
             stepIdx={stepIdx}
             width={width}
             height={height}
-            codeFlowScrollTop={codeFlowScrollTop}
             onScroll={handleScrollCodeFlow}
           />
           <CallStackView
             StructuresList={StructuresList}
             stepIdx={stepIdx}
-            width={width}
-            height={height}
-            structuresScrollTop={structuresScrollTop}
             onScroll={handleScrollStructures}
             ref={rightSection2Ref}
           />

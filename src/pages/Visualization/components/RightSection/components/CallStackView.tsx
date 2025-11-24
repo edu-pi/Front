@@ -6,14 +6,11 @@ import { WrapperDataStructureItem } from "@/pages/Visualization/types/dataStruct
 interface CallStackViewProps {
   StructuresList: AllDataStructureItem;
   stepIdx: number;
-  width: number;
-  height: number;
-  structuresScrollTop: number;
   onScroll: (e: React.UIEvent<HTMLDivElement>) => void;
 }
 
 export const CallStackView = React.forwardRef<HTMLDivElement, CallStackViewProps>(
-  ({ StructuresList, stepIdx, width, height, structuresScrollTop, onScroll }, ref) => {
+  ({ StructuresList, stepIdx, onScroll }, ref) => {
     return (
       <div id="split-2-2" className="view-section2-2" ref={ref}>
         <div className="view-data" onScroll={onScroll}>
@@ -21,12 +18,7 @@ export const CallStackView = React.forwardRef<HTMLDivElement, CallStackViewProps
           <ul className="var-list">
             {StructuresList?.length > 0 &&
               stepIdx >= 0 &&
-              renderingStructure(
-                StructuresList[stepIdx] as WrapperDataStructureItem,
-                width,
-                height,
-                structuresScrollTop
-              )}
+              renderingStructure(StructuresList[stepIdx] as WrapperDataStructureItem)}
           </ul>
         </div>
       </div>
