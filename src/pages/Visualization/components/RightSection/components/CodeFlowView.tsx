@@ -7,18 +7,10 @@ interface CodeFlowViewProps {
   stepIdx: number;
   width: number;
   height: number;
-  codeFlowScrollTop: number;
   onScroll: (e: React.UIEvent<HTMLDivElement>) => void;
 }
 
-export const CodeFlowView: React.FC<CodeFlowViewProps> = ({
-  codeFlowList,
-  stepIdx,
-  width,
-  height,
-  codeFlowScrollTop,
-  onScroll,
-}) => {
+export const CodeFlowView: React.FC<CodeFlowViewProps> = ({ codeFlowList, stepIdx, width, height, onScroll }) => {
   return (
     <div id="split-2-1" className="view-section2-1">
       <div className="view-data" onScroll={onScroll}>
@@ -26,10 +18,9 @@ export const CodeFlowView: React.FC<CodeFlowViewProps> = ({
         <div style={{ width: "600px", display: "flex", flexDirection: "column", flex: 1 }}>
           {codeFlowList?.length > 0 &&
             stepIdx >= 0 &&
-            renderingCodeFlow(codeFlowList[stepIdx].objects[0].child, width, height, codeFlowScrollTop)}
+            renderingCodeFlow(codeFlowList[stepIdx].objects[0].child, width, height)}
         </div>
       </div>
     </div>
   );
 };
-
