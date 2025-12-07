@@ -1,6 +1,7 @@
 import React from "react";
-import { renderingCodeFlow } from "../renderingCodeFlow";
+import CodeFlowRenderer from "../CodeFlowRenderer";
 import { State } from "../types";
+import { VisualizationProvider } from "@/pages/Visualization/context/VisualizationContext";
 
 interface CodeFlowViewProps {
   codeFlowList: State[];
@@ -16,9 +17,11 @@ export const CodeFlowView: React.FC<CodeFlowViewProps> = ({ codeFlowList, stepId
       <div className="view-data" onScroll={onScroll}>
         <p className="data-name">코드흐름</p>
         <div style={{ width: "600px", display: "flex", flexDirection: "column", flex: 1 }}>
-          {codeFlowList?.length > 0 &&
-            stepIdx >= 0 &&
-            renderingCodeFlow(codeFlowList[stepIdx].objects[0].child, width, height)}
+          <VisualizationProvider width={width} height={height}>
+            {codeFlowList?.length > 0 && stepIdx >= 0 && (
+              <CodeFlowRenderer codeFlows={codeFlowList[stepIdx].objects[0].child} />
+            )}
+          </VisualizationProvider>
         </div>
       </div>
     </div>

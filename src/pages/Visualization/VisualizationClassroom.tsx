@@ -176,13 +176,13 @@ const VisualizationClassroom = () => {
   const guestActionMutation = useGuestActionMutation();
 
   const handelIngRequest = () => {
-    guestActionMutation.mutate({ classroomId: classroomId, action: 1, code: code });
+    guestActionMutation.mutate({ classroomId: classroomId, action: "1", code: code });
   };
   const handleHelpRequest = () => {
-    guestActionMutation.mutate({ classroomId: classroomId, action: 2, code: code });
+    guestActionMutation.mutate({ classroomId: classroomId, action: "2", code: code });
   };
   const handleCompleteRequest = () => {
-    guestActionMutation.mutate({ classroomId: classroomId, action: 3, code: code });
+    guestActionMutation.mutate({ classroomId: classroomId, action: "3", code: code });
   };
   return (
     <CodeContext.Provider value={{ code, setCode }}>

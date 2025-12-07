@@ -2,23 +2,24 @@ import { useRef, useEffect, ReactNode } from "react";
 import cx from "classnames";
 import styles from "./CodeFlowTupleWrapper.module.css";
 //components
-import CodeFlowTupleBlock from "./components/CodeFlowTupleBlock.tsx";
+import CodeFlowTupleBlock from "./components/CodeFlowTupleBlock";
 //type
-import { CodeFlowTupleItem } from "@/pages/Visualization/types/codeFlow/codeFlowTupleItem.ts";
+import { CodeFlowTupleItem } from "@/pages/Visualization/types/codeFlow/codeFlowTupleItem";
 //zustand
 import { useArrowStore } from "@/store/arrow";
 
+import { useVisualizationContext } from "@/pages/Visualization/context/VisualizationContext";
+
 interface CodeFlowWrapperItemProps {
   codeFlowWrapperItem: CodeFlowTupleItem;
-  height: number;
-  width: number;
   children?: ReactNode;
 }
 
-const GetCodeFlowWrapperBoxLocation = ({ codeFlowWrapperItem, height, width, children }: CodeFlowWrapperItemProps) => {
+const GetCodeFlowWrapperBoxLocation = ({ codeFlowWrapperItem, children }: CodeFlowWrapperItemProps) => {
   const ref = useRef<HTMLDivElement>(null);
   const setTop = useArrowStore((state) => state.setTop);
   const setRight = useArrowStore((state) => state.setRight);
+  const { width, height } = useVisualizationContext();
 
   useEffect(() => {
     if (ref.current && codeFlowWrapperItem.isLight) {
@@ -36,22 +37,15 @@ const GetCodeFlowWrapperBoxLocation = ({ codeFlowWrapperItem, height, width, chi
 };
 type Props = {
   codeFlowTupleItem: CodeFlowTupleItem;
-  height: number;
-  width: number;
 };
 
-function CodeFlowTupleWrapper({ codeFlowTupleItem, height, width }: Props) {
+function CodeFlowTupleWrapper({ codeFlowTupleItem }: Props) {
   const { expr, isLight } = codeFlowTupleItem;
   const exprArray = expr?.slice(1, -1).split(",");
 
   return (
     <div className={cx("align-left", styles["fit-content"])}>
-      <GetCodeFlowWrapperBoxLocation
-        key={codeFlowTupleItem.id}
-        height={height}
-        width={width}
-        codeFlowWrapperItem={codeFlowTupleItem}
-      >
+      <GetCodeFlowWrapperBoxLocation key={codeFlowTupleItem.id} codeFlowWrapperItem={codeFlowTupleItem}>
         <div className={styles.wrapper}>
           <div className={styles["direction-column"]}>
             <img src="/image/img_lock.png" alt="자물쇠" className={styles["tuple-lock"]}></img>

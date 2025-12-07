@@ -124,7 +124,6 @@ const RightSection = ({ onboardingStep, setTutorialPosition }: RightSectionProps
           direction="horizontal"
           cursor="col-resize"
           style={{ display: "flex", flexDirection: "row", height: "100%", flex: 1, overflow: "hidden" }}
-          className="split-container"
         >
           <CodeFlowView
             codeFlowList={codeFlowList}

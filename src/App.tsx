@@ -1,7 +1,7 @@
-import { useEffect } from "react";
+import { useEffect, lazy, Suspense } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Visualization from "./pages/Visualization/Visualization";
-import VisualizationClassroom from "./pages/Visualization/VisualizationClassroom";
+// import Visualization from "./pages/Visualization/Visualization";
+// import VisualizationClassroom from "./pages/Visualization/VisualizationClassroom";
 import Signup from "./pages/Signup/Signup";
 import Login from "./pages/Login/Login";
 import Home from "./pages/Home/Home";
@@ -10,6 +10,10 @@ import ClassroomDashboard from "./pages/ClassroomDashboard/ClassroomDashboard";
 import Assignment from "./pages/Assignment/Assignment";
 import Classroom from "./pages/Classroom/Classroom";
 import AuthEmail from "./pages/AuthEmail/AuthEmail";
+import StaticVisualization from "./pages/Visualization/components/StaticVisualization";
+
+const Visualization = lazy(() => import("./pages/Visualization/Visualization"));
+const VisualizationClassroom = lazy(() => import("./pages/Visualization/VisualizationClassroom"));
 
 import { useMswReadyStore } from "@/store/mswReady";
 import "./App.css";
@@ -34,13 +38,13 @@ function App() {
       if (typeof window !== "undefined") {
         // 환경변수에 따라 MSW 활성화 여부 결정
         const shouldUseMSW = import.meta.env.VITE_APP_USE_MSW === "true";
-        
+
         if (shouldUseMSW) {
           await setupMSW();
         } else {
           console.log("MSW disabled - Using real API server");
         }
-        
+
         setIsMswReady(true);
       }
     }
@@ -69,8 +73,22 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/viz" element={<Visualization />} />
-        <Route path="/classroomdashboard/classroom/viz/:classroomId" element={<VisualizationClassroom />} />
+        <Route
+          path="/viz"
+          element={
+            <Suspense fallback={<StaticVisualization />}>
+              <Visualization />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/classroomdashboard/classroom/viz/:classroomId"
+          element={
+            <Suspense fallback={<StaticVisualization />}>
+              <VisualizationClassroom />
+            </Suspense>
+          }
+        />
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
         <Route path="/classroomdashboard/classroom/manage/:classroomId" element={<Manage />} />

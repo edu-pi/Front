@@ -7,16 +7,17 @@ import { AnimatePresence, motion } from "framer-motion";
 import { ForItem } from "@/pages/Visualization/types/codeFlow/forItem";
 //zustand
 import { useArrowStore } from "@/store/arrow";
+import { useVisualizationContext } from "@/pages/Visualization/context/VisualizationContext";
+
 interface ForItemProps {
   forItem: ForItem;
-  width: number;
-  height: number;
   children?: ReactNode;
 }
-const GetForBoxLocation = ({ forItem, width, height, children }: ForItemProps) => {
+const GetForBoxLocation = ({ forItem, children }: ForItemProps) => {
   const ref = useRef<HTMLDivElement>(null);
   const setTop = useArrowStore((state) => state.setTop);
   const setRight = useArrowStore((state) => state.setRight);
+  const { width, height } = useVisualizationContext();
 
   useEffect(() => {
     if (ref.current && forItem.isLight) {
@@ -35,14 +36,12 @@ const GetForBoxLocation = ({ forItem, width, height, children }: ForItemProps) =
 type Props = {
   children: ReactNode;
   forItem: ForItem;
-  width: number;
-  height: number;
 };
 
-const ForBox = ({ children, forItem, width, height }: Props) => {
+const ForBox = ({ children, forItem }: Props) => {
   return (
     <AnimatePresence key={forItem.id}>
-      <GetForBoxLocation key={forItem.id} forItem={forItem} width={width} height={height}>
+      <GetForBoxLocation key={forItem.id} forItem={forItem}>
         <motion.div
           layout
           initial={{ opacity: 0 }}

@@ -144,15 +144,7 @@ export default function Visualization() {
                 <LeftSection onboardingStep={onboardingStep} setTutorialPosition={setTutorialPosition} />
                 <RightSection onboardingStep={onboardingStep} setTutorialPosition={setTutorialPosition} />
               </Split>
-              <div className="floating-buttons">
-                <div className="btn btn-manual">
-                  <img
-                    src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 4h18v16H3z'%3E%3C/path%3E%3Cpath d='M8 4v16M16 4v16'%3E%3C/path%3E%3C/svg%3E"
-                    alt="완료 아이콘"
-                  />
-                  사용법
-                </div>
-              </div>
+
               {isTutorialVisible && (
                 <>
                   <div
