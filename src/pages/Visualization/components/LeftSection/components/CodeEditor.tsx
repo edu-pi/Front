@@ -27,12 +27,15 @@ const CodeEditor = ({ onboardingStep, setTutorialPosition }: props) => {
   const stepIdx = useConsoleStore((state) => state.stepIdx);
   const errorLine = useEditorStore((state) => state.errorLine);
   const resetErrorLine = useEditorStore((state) => state.resetErrorLine);
-  const { setFocus } = useEditorStore();
+  const setFocus = useEditorStore((state) => state.setFocus);
   const setIsGptToggle = useGptTooltipStore((state) => state.setIsGptToggle);
-  const { setGptTop, setGptLeft } = useGptTooltipStore();
-  const { setTimeoutId, clearCurrentTimeout } = useTimeoutStore();
-  const { gptPin, setGptPin } = useGptTooltipStore();
-  const { resetTrigger } = useResetEditor();
+  const setGptTop = useGptTooltipStore((state) => state.setGptTop);
+  const setGptLeft = useGptTooltipStore((state) => state.setGptLeft);
+  const setTimeoutId = useTimeoutStore((state) => state.setTimeoutId);
+  const clearCurrentTimeout = useTimeoutStore((state) => state.clearCurrentTimeout);
+  const gptPin = useGptTooltipStore((state) => state.gptPin);
+  const setGptPin = useGptTooltipStore((state) => state.setGptPin);
+  const resetTrigger = useResetEditor((state) => state.resetTrigger);
   const timeoutRef = useRef<number | null>(null);
   const codeEditorRef = useRef<HTMLDivElement | null>(null);
   const calculatePosition = () => {
