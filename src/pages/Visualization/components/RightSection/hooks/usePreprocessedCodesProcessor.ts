@@ -2,19 +2,9 @@ import { useEffect, useState } from "react";
 import { PreprocessedCodesContext } from "../../../context/PreProcessedCodesContext";
 import { useContext } from "react";
 import { ActivateItem } from "@/pages/Visualization/types/activateItem";
-import { VariablesDto } from "@/pages/Visualization/types/dto/variablesDto";
-import { ForDto } from "@/pages/Visualization/types/dto/forDto";
-import { PrintDto } from "@/pages/Visualization/types/dto/printDto";
-import { IfElseDto } from "@/pages/Visualization/types/dto/ifElseDto";
-import { CodeFlowVariableDto } from "@/pages/Visualization/types/dto/codeFlowVariableDto";
-import { WhileDto } from "@/pages/Visualization/types/dto/whileDto";
 import { AllDataStructureItem } from "@/pages/Visualization/types/dataStructuresItem/allDataStructureItem";
 import { WrapperDataStructureItem } from "@/pages/Visualization/types/dataStructuresItem/wrapperDataStructureItem";
-import { CreateCallStackDto } from "@/pages/Visualization/types/dto/createCallStackDto";
-import { EndUserFuncDto } from "@/pages/Visualization/types/dto/endUserFuncDto";
 import { usedNameObjectType } from "../../../types/dataStructuresItem/usedNameObjectType";
-import { AppendDto } from "../../../types/dto/appendDto";
-import { IfElseChangeDto } from "@/pages/Visualization/types/dto/ifElseChangeDto";
 import { State } from "../types";
 import { useConsoleStore, useCodeFlowLengthStore } from "@/store/console";
 import { useEditorStore } from "@/store/editor";
@@ -22,17 +12,9 @@ import { useArrowStore } from "@/store/arrow";
 import _ from "lodash";
 
 // Processors
-import { processEndUserFunc } from "./processors/processEndUserFunc";
-import { processAppend } from "./processors/processAppend";
-import { processAssign } from "./processors/processAssign";
-import { processCreateCallStack } from "./processors/processCreateCallStack";
-import { processIfElseDefine } from "./processors/processIfElseDefine";
-import { processCodeFlow } from "./processors/processCodeFlow";
-import {
-  resetDataStructuresLight,
-  calculateToLightStructures,
-  applyLightToStructures,
-} from "./processors/utils";
+import { dispatchProcessor } from "./processors/processorDispatcher";
+import { ProcessorContext } from "./processors/types";
+import { resetDataStructuresLight, calculateToLightStructures, applyLightToStructures } from "./processors/utils";
 
 interface ProcessingState {
   prevTrackingId: number;
@@ -113,98 +95,30 @@ export const usePreprocessedCodesProcessor = () => {
 
       const codeType = preprocessedCode.type.toLowerCase();
 
-      // 타입별 처리
-      if (codeType === "enduserfunc") {
-        const result = processEndUserFunc({
-          preprocessedCode: preprocessedCode as EndUserFuncDto,
-          accCodeFlow: state.accCodeFlow,
-          accDataStructures: state.accDataStructures,
-          usedName: state.usedName,
-          prevTrackingId: state.prevTrackingId,
-          prevTrackingDepth: state.prevTrackingDepth,
-        });
+      const context: ProcessorContext = {
+        preprocessedCode,
+        accCodeFlow: state.accCodeFlow,
+        accDataStructures: state.accDataStructures,
+        usedName: state.usedName,
+        usedId: state.usedId,
+        activate: state.activate,
+        prevTrackingId: state.prevTrackingId,
+        prevTrackingDepth: state.prevTrackingDepth,
+      };
 
-        state.accCodeFlow = result.accCodeFlow;
-        state.accDataStructures = result.accDataStructures;
-        state.usedName = result.usedName;
-        state.arrowTexts.push(result.arrowText);
-        state.highlightLine.push(result.highlightId);
-        state.prevTrackingId = result.newTrackingId;
-        state.prevTrackingDepth = result.newTrackingDepth;
-      } else if (codeType === "append") {
-        const result = processAppend({
-          preprocessedCode: preprocessedCode as AppendDto,
-          accCodeFlow: state.accCodeFlow,
-          accDataStructures: state.accDataStructures,
-          usedId: state.usedId,
-        });
+      const result = dispatchProcessor(codeType, context);
 
-        state.accCodeFlow = result.accCodeFlow;
-        state.accDataStructures = result.accDataStructures;
-        state.usedId = result.usedId;
-        state.arrowTexts.push(result.arrowText);
-        state.highlightLine.push(result.highlightId);
-      } else if (codeType === "assign") {
-        const result = processAssign({
-          preprocessedCode: preprocessedCode as VariablesDto,
-          accCodeFlow: state.accCodeFlow,
-          accDataStructures: state.accDataStructures,
-          usedName: state.usedName,
-          usedId: state.usedId,
-        });
+      if (result.accCodeFlow) state.accCodeFlow = result.accCodeFlow;
+      if (result.accDataStructures) state.accDataStructures = result.accDataStructures;
+      if (result.usedName) state.usedName = result.usedName;
+      if (result.usedId) state.usedId = result.usedId;
+      if (result.activate) state.activate = result.activate;
+      if (result.consoleLog) state.accConsoleLog += result.consoleLog;
+      if (result.newTrackingId !== undefined) state.prevTrackingId = result.newTrackingId;
+      if (result.newTrackingDepth !== undefined) state.prevTrackingDepth = result.newTrackingDepth;
 
-        state.accCodeFlow = result.accCodeFlow;
-        state.accDataStructures = result.accDataStructures;
-        state.usedName = result.usedName;
-        state.usedId = result.usedId;
-        state.arrowTexts.push(...result.arrowTexts);
-        state.highlightLine.push(...result.highlightIds);
-      } else if (codeType === "createcallstack") {
-        const result = processCreateCallStack({
-          preprocessedCode: preprocessedCode as CreateCallStackDto,
-          accDataStructures: state.accDataStructures,
-          usedName: state.usedName,
-        });
-
-        state.accDataStructures = result.accDataStructures;
-        state.usedName = result.usedName;
-        state.arrowTexts.push(result.arrowText);
-        state.highlightLine.push(result.highlightId);
-      } else if (codeType === "ifelsedefine") {
-        const result = processIfElseDefine({
-          preprocessedCode: preprocessedCode as IfElseDto,
-          accCodeFlow: state.accCodeFlow,
-          usedId: state.usedId,
-          prevTrackingId: state.prevTrackingId,
-          prevTrackingDepth: state.prevTrackingDepth,
-        });
-
-        state.accCodeFlow = result.accCodeFlow;
-        state.usedId = result.usedId;
-        state.arrowTexts.push(result.arrowText);
-        state.highlightLine.push(result.highlightId);
-        state.prevTrackingId = result.newTrackingId;
-        state.prevTrackingDepth = result.newTrackingDepth;
-      } else {
-        // 기타 타입 (for, print, while, variable 등)
-        const result = processCodeFlow({
-          preprocessedCode: preprocessedCode as ForDto | PrintDto | IfElseChangeDto | CodeFlowVariableDto | WhileDto,
-          accCodeFlow: state.accCodeFlow,
-          usedId: state.usedId,
-          activate: state.activate,
-          prevTrackingId: state.prevTrackingId,
-          prevTrackingDepth: state.prevTrackingDepth,
-        });
-
-        state.accCodeFlow = result.accCodeFlow;
-        state.usedId = result.usedId;
-        state.activate = result.activate;
-        state.arrowTexts.push(result.arrowText);
-        state.highlightLine.push(result.highlightId);
-        state.accConsoleLog += result.consoleLog;
-        state.prevTrackingId = result.newTrackingId;
-        state.prevTrackingDepth = result.newTrackingDepth;
-      }
+      state.arrowTexts.push(...result.arrowTexts);
+      state.highlightLine.push(...result.highlightIds);
 
       // toLightStructures 계산 및 적용
       const { toLightStructures, accCodeFlow: updatedCodeFlow } = calculateToLightStructures(
