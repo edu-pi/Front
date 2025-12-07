@@ -1,5 +1,5 @@
 import { ForItem } from "@/pages/Visualization/types/codeFlow/forItem";
-import { ConditionItem } from "@/pages/Visualization/types/codeFlow/conditionItem";
+
 import { PrintItem } from "@/pages/Visualization/types/codeFlow/printItem";
 import { ForDataToAdd } from "@/pages/Visualization/types/dataToAdd/forDataToAdd";
 import { PrintDataToAdd } from "@/pages/Visualization/types/dataToAdd/printDataToAdd";
@@ -27,11 +27,10 @@ export const createObjectToAdd = (
     | FlowControlDto
     | EndUserFuncDto
 ): CodeFlowItem => {
-  const baseObject: Partial<CodeFlowItem> = {
+  const baseObject = {
     id: preprocessedCode.id!,
     type: preprocessedCode.type,
     depth: preprocessedCode.depth!,
-    code: preprocessedCode.code!,
     isLight: false,
     child: [],
   };
@@ -86,30 +85,31 @@ export const createObjectToAdd = (
 
     case "if":
       return {
-        ...(baseObject as ConditionItem),
+        ...baseObject,
         highlights: [],
         expr: (preprocessedCode as IfElseDataToAdd).expr,
       };
 
     case "elif":
       return {
-        ...(baseObject as ConditionItem),
+        ...baseObject,
         highlights: [],
         expr: (preprocessedCode as IfElseDataToAdd).expr,
       };
 
     case "else":
       return {
-        ...(baseObject as ConditionItem),
+        ...baseObject,
         highlights: [],
         expr: (preprocessedCode as IfElseDataToAdd).expr,
       };
     case "input":
       return {
-        ...(baseObject as InputDto),
+        ...baseObject,
         highlights: [],
         expr: (preprocessedCode as InputDto).expr,
         console: (preprocessedCode as InputDto).console,
+        code: preprocessedCode.code!,
       };
     case "ifelsechange":
       return {
@@ -150,11 +150,13 @@ export const createObjectToAdd = (
       return {
         ...baseObject,
         returnExpr: (preprocessedCode as ReturnDto).returnExpr,
+        code: preprocessedCode.code!,
       };
     case "flowcontrol":
       return {
         ...baseObject,
         expr: (preprocessedCode as FlowControlDto).expr,
+        code: preprocessedCode.code!,
       };
     case "enduserfunc":
       return {
@@ -167,4 +169,4 @@ export const createObjectToAdd = (
     default:
       throw new Error(`Unsupported type: ${type}`);
   }
-} as CodeFlowItem;
+};

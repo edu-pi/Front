@@ -7,16 +7,17 @@ import CodeFlowListBlock from "./components/CodeFlowListBlock";
 import { CodeFlowListItem } from "@/pages/Visualization/types/codeFlow/codeFlowListItem";
 //zustand
 import { useArrowStore } from "@/store/arrow";
+import { useVisualizationContext } from "@/pages/Visualization/context/VisualizationContext";
+
 interface CodeFlowWrapperItemProps {
   codeFlowWrapperItem: CodeFlowListItem;
-  height: number;
-  width: number;
   children?: ReactNode;
 }
-const GetCodeFlowWrapperBoxLocation = ({ codeFlowWrapperItem, height, width, children }: CodeFlowWrapperItemProps) => {
+const GetCodeFlowWrapperBoxLocation = ({ codeFlowWrapperItem, children }: CodeFlowWrapperItemProps) => {
   const ref = useRef<HTMLDivElement>(null);
   const setTop = useArrowStore((state) => state.setTop);
   const setRight = useArrowStore((state) => state.setRight);
+  const { width, height } = useVisualizationContext();
 
   useEffect(() => {
     if (ref.current && codeFlowWrapperItem.isLight) {
@@ -34,24 +35,17 @@ const GetCodeFlowWrapperBoxLocation = ({ codeFlowWrapperItem, height, width, chi
 };
 type Props = {
   codeFlowListItem: CodeFlowListItem;
-  height: number;
-  width: number;
 };
-function CodeFlowListWrapper({ codeFlowListItem, height, width }: Props) {
+function CodeFlowListWrapper({ codeFlowListItem }: Props) {
   let { expr, isLight } = codeFlowListItem;
-  if(expr?.startsWith("[") && expr?.endsWith("]")) {
-    expr = expr?.slice(1, -1)
+  if (expr?.startsWith("[") && expr?.endsWith("]")) {
+    expr = expr?.slice(1, -1);
   }
   const exprArray = expr.split(",");
 
   return (
     <div className={cx("align-left", styles["fit-content"])}>
-      <GetCodeFlowWrapperBoxLocation
-        key={codeFlowListItem.id}
-        height={height}
-        width={width}
-        codeFlowWrapperItem={codeFlowListItem}
-      >
+      <GetCodeFlowWrapperBoxLocation key={codeFlowListItem.id} codeFlowWrapperItem={codeFlowListItem}>
         <div className={styles.wrapper}>
           {exprArray?.map((exprItem, index) => {
             return <CodeFlowListBlock key={index} exprItem={exprItem} isLight={isLight} index={index} />;

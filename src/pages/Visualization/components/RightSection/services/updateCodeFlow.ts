@@ -12,9 +12,9 @@ export const updateCodeFlow = (
           ...toAddObject,
           type: codeFlow.type,
           child: codeFlow.child || [],
-        };
+        } as CodeFlowItem;
       }
-      return { ...codeFlow, ...toAddObject, child: codeFlow.child || [] };
+      return { ...codeFlow, ...toAddObject, child: codeFlow.child || [] } as CodeFlowItem;
     }
     if (codeFlow.child && codeFlow.child.length > 0) {
       return {

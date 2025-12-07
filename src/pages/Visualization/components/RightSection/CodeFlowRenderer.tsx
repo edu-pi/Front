@@ -1,6 +1,8 @@
-import { useRef, ReactNode } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { memo } from "react";
 import { ReactElement } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+
+// Components
 import PrintBox from "./components/PrintBox/PrintBox";
 import ForBox from "./components/ForBox/ForBox";
 import IfBox from "./components/IfBox/IfBox";
@@ -14,39 +16,28 @@ import CallUserFuncBox from "./components/CallUserFuncBox/CallUserFuncBox";
 import ReturnBox from "./components/ReturnBox/ReturnBox";
 import FlowControlBox from "./components/FlowControlBox/FlowControlBox";
 import InputBox from "./components/InputBox/InputBox";
-// type import
-import { ElseItem } from "@/pages/Visualization/types/codeFlow/elseItem";
-import { ForItem } from "@/pages/Visualization/types/codeFlow/forItem";
+import CodeFlowItem from "./components/CodeFlowItem";
+
+// Types
+import { CodeFlowItem as CodeFlowItemType } from "./types";
 import { PrintItem } from "@/pages/Visualization/types/codeFlow/printItem";
+import { ForItem } from "@/pages/Visualization/types/codeFlow/forItem";
 import { ConditionItem } from "@/pages/Visualization/types/codeFlow/conditionItem";
+import { ElseItem } from "@/pages/Visualization/types/codeFlow/elseItem";
 import { CodeFlowVariableItem } from "@/pages/Visualization/types/codeFlow/codeFlowVariableItem";
 import { CodeFlowListItem } from "@/pages/Visualization/types/codeFlow/codeFlowListItem";
 import { CodeFlowTupleItem } from "@/pages/Visualization/types/codeFlow/codeFlowTupleItem";
 import { WhileItem } from "@/pages/Visualization/types/codeFlow/whileItem";
 import { CallUserFuncItem } from "@/pages/Visualization/types/codeFlow/callUserFuncItem";
 import { ReturnItem } from "@/pages/Visualization/types/codeFlow/returnItem";
+import { FlowControlItem } from "@/pages/Visualization/types/codeFlow/flowControlItem";
 import { InputItem } from "@/pages/Visualization/types/codeFlow/inputItem";
-//zustand
 
-import { FlowControlItem } from "@/pages/Visualization/types/codeFlow/flowControlItem.ts";
-
-import { CodeFlowItem as CodeFlowItemType } from "./types";
-
-interface Props {
-  codeFlow: CodeFlowItemType;
-  children?: ReactNode;
+interface CodeFlowRendererProps {
+  codeFlows: CodeFlowItemType[];
 }
-const CodeFlowItem = ({ codeFlow, children }: Props) => {
-  const ref = useRef<HTMLDivElement>(null);
 
-  return (
-    <div style={{ width: "fit-content" }} ref={ref} id={codeFlow.isLight ? "highlighted-code-flow" : undefined}>
-      {children}
-    </div>
-  );
-};
-
-export const renderingCodeFlow = (codeFlows: CodeFlowItemType[], width: number, height: number): ReactElement => {
+const CodeFlowRenderer = memo(({ codeFlows }: CodeFlowRendererProps): ReactElement => {
   return (
     <>
       {codeFlows.map((codeFlow, index) => {
@@ -57,7 +48,7 @@ export const renderingCodeFlow = (codeFlows: CodeFlowItemType[], width: number, 
             return (
               <CodeFlowItem key={printItem.id} codeFlow={codeFlow}>
                 <PrintBox key={printItem.id} printItem={printItem} />
-                {renderingCodeFlow(codeFlow.child, width, height)}
+                <CodeFlowRenderer codeFlows={codeFlow.child} />
               </CodeFlowItem>
             );
           }
@@ -65,8 +56,8 @@ export const renderingCodeFlow = (codeFlows: CodeFlowItemType[], width: number, 
             const forItem = codeFlow as ForItem;
             return (
               <div key={forItem.id}>
-                <ForBox key={forItem.id} forItem={forItem} width={width} height={height}>
-                  {renderingCodeFlow(codeFlow.child, width, height)}
+                <ForBox key={forItem.id} forItem={forItem}>
+                  <CodeFlowRenderer codeFlows={codeFlow.child} />
                 </ForBox>
               </div>
             );
@@ -78,7 +69,7 @@ export const renderingCodeFlow = (codeFlows: CodeFlowItemType[], width: number, 
                 <motion.div key={ifItem.id} layout>
                   <CodeFlowItem key={index} codeFlow={codeFlow}>
                     <IfBox isLight={codeFlow.isLight} ifItem={ifItem}>
-                      {renderingCodeFlow(codeFlow.child, width, height)}
+                      <CodeFlowRenderer codeFlows={codeFlow.child} />
                     </IfBox>
                   </CodeFlowItem>
                 </motion.div>
@@ -91,7 +82,7 @@ export const renderingCodeFlow = (codeFlows: CodeFlowItemType[], width: number, 
                 <motion.div key={elifItem.id} layout>
                   <CodeFlowItem key={index} codeFlow={codeFlow}>
                     <ElifBox isLight={codeFlow.isLight} elifItem={elifItem}>
-                      {renderingCodeFlow(codeFlow.child, width, height)}
+                      <CodeFlowRenderer codeFlows={codeFlow.child} />
                     </ElifBox>
                   </CodeFlowItem>
                 </motion.div>
@@ -104,7 +95,7 @@ export const renderingCodeFlow = (codeFlows: CodeFlowItemType[], width: number, 
                 <motion.div key={elseItem.id} layout>
                   <CodeFlowItem key={index} codeFlow={codeFlow}>
                     <ElseBox isLight={codeFlow.isLight} elseItem={elseItem}>
-                      {renderingCodeFlow(codeFlow.child, width, height)}
+                      <CodeFlowRenderer codeFlows={codeFlow.child} />
                     </ElseBox>
                   </CodeFlowItem>
                 </motion.div>
@@ -114,26 +105,21 @@ export const renderingCodeFlow = (codeFlows: CodeFlowItemType[], width: number, 
             const variableItem = codeFlow as CodeFlowVariableItem;
             return (
               <CodeFlowItem key={variableItem.id} codeFlow={codeFlow}>
-                <CodeFlowVariableBox
-                  key={variableItem.id}
-                  codeFlowVariableItem={variableItem}
-                  width={width}
-                  height={height}
-                />
+                <CodeFlowVariableBox key={variableItem.id} codeFlowVariableItem={variableItem} />
               </CodeFlowItem>
             );
           case "list":
             const listItem = codeFlow as CodeFlowListItem;
             return (
               <CodeFlowItem key={listItem.id} codeFlow={codeFlow}>
-                <CodeFlowListWrapper codeFlowListItem={listItem} width={width} height={height} />
+                <CodeFlowListWrapper codeFlowListItem={listItem} />
               </CodeFlowItem>
             );
           case "tuple":
             const tupleItem = codeFlow as CodeFlowTupleItem;
             return (
               <CodeFlowItem key={tupleItem.id} codeFlow={codeFlow}>
-                <CodeFlowTupleWrapper codeFlowTupleItem={tupleItem} width={width} height={height} />
+                <CodeFlowTupleWrapper codeFlowTupleItem={tupleItem} />
               </CodeFlowItem>
             );
           case "while":
@@ -142,7 +128,7 @@ export const renderingCodeFlow = (codeFlows: CodeFlowItemType[], width: number, 
               <div key={whileItem.id}>
                 <CodeFlowItem key={index} codeFlow={codeFlow}>
                   <WhileBox key={index} whileItem={whileItem}>
-                    {renderingCodeFlow(codeFlow.child, width, height)}
+                    <CodeFlowRenderer codeFlows={codeFlow.child} />
                   </WhileBox>
                 </CodeFlowItem>
               </div>
@@ -153,7 +139,7 @@ export const renderingCodeFlow = (codeFlows: CodeFlowItemType[], width: number, 
               <div key={callUserFuncItem.id}>
                 <CodeFlowItem key={index} codeFlow={codeFlow}>
                   <CallUserFuncBox key={index} callUserFuncItem={callUserFuncItem}>
-                    {renderingCodeFlow(codeFlow.child, width, height)}
+                    <CodeFlowRenderer codeFlows={codeFlow.child} />
                   </CallUserFuncBox>
                 </CodeFlowItem>
               </div>
@@ -168,11 +154,11 @@ export const renderingCodeFlow = (codeFlows: CodeFlowItemType[], width: number, 
               </div>
             );
           case "flowcontrol":
-            const FlowControlItem = codeFlow as FlowControlItem;
+            const flowControlItem = codeFlow as FlowControlItem;
             return (
-              <div key={FlowControlItem.id}>
+              <div key={flowControlItem.id}>
                 <CodeFlowItem key={index} codeFlow={codeFlow}>
-                  <FlowControlBox key={index} flowControlItem={FlowControlItem} />
+                  <FlowControlBox key={index} flowControlItem={flowControlItem} />
                 </CodeFlowItem>
               </div>
             );
@@ -192,4 +178,6 @@ export const renderingCodeFlow = (codeFlows: CodeFlowItemType[], width: number, 
       })}
     </>
   );
-};
+});
+
+export default CodeFlowRenderer;
