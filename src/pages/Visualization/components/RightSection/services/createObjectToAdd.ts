@@ -167,4 +167,4 @@ export const createObjectToAdd = (
     default:
       throw new Error(`Unsupported type: ${type}`);
   }
-} as CodeFlowItem;
+};

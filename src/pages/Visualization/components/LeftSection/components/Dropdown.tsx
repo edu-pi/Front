@@ -13,7 +13,11 @@ import {
 } from "./exampleCode.ts";
 import { PreprocessedCodesContext } from "@/pages/Visualization/context/PreProcessedCodesContext.ts";
 
-const Dropdown = () => {
+interface DropdownProps {
+  isTutorialActive?: boolean;
+}
+
+const Dropdown = ({ isTutorialActive }: DropdownProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState("커리큘럼");
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -53,7 +57,7 @@ const Dropdown = () => {
   };
 
   return (
-    <div className={styles["select-box"]} ref={dropdownRef}>
+    <div className={styles["select-box"]} ref={dropdownRef} style={isTutorialActive ? { zIndex: "unset" } : undefined}>
       <div
         className={`${styles["default-option"]} ${selectedOption !== "커리큘럼" ? styles["is_selected"] : ""}`}
         onClick={toggleDropdown}

@@ -69,7 +69,7 @@ const LeftSection = ({ onboardingStep, setTutorialPosition }: props) => {
           <p className={styles["view-section-title"]}>코드 작성</p>
           <div className="flex items-center gap-4">
             <div ref={curriculumButtonRef} className={`tutorial-button ${onboardingStep[5] ? "active" : ""}`}>
-              <Dropdown />
+              <Dropdown isTutorialActive={onboardingStep.some((step) => step)} />
             </div>
           </div>
         </div>
